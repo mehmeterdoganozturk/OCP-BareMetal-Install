@@ -2,6 +2,8 @@
 
 ##  User Provisioned Infrastructure (UPI) Install Documentation.
 
+![alt text](OCP_Cover.jpg)
+
 **Architecture Diagram**
 
 
