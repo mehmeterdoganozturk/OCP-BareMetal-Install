@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  ocpbaremetalinstall:
+    image: ocpbaremetalinstall
+    build:
+      context: .
+      dockerfile: ./Dockerfile
