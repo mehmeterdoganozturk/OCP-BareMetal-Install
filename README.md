@@ -9,5 +9,5 @@
 
 **Download Software**
 
-oc get pods --all-namespaces
+oc get pods --all-namespaces <br/>
 oc delete pods --field-selector=status.phase==Succeeded --all-namespaces
