@@ -10,9 +10,9 @@
 Retrieved from https://console.redhat.com/openshift/install/metal/user-provisioned 
 OpenShift installer, Pull secret key to be used in the installation yaml file, Command line interface CoreOS (RHCOS) ISO files are downloaded.
 
-![alt text](./images/cluster01.png)
-![alt text](./images/cluster02.png)
-![alt text](./images/cluster03.png)
+<img src="https://raw.githubusercontent.com/mehmeterdoganozturk/OCP-BareMetal-Install/main/images/cluster01.png" width="600"/>
+<img src="https://raw.githubusercontent.com/mehmeterdoganozturk/OCP-BareMetal-Install/main/images/cluster02.png" width="600"/>
+<img src="https://raw.githubusercontent.com/mehmeterdoganozturk/OCP-BareMetal-Install/main/images/cluster03.png" width="600"/>
 
 **Download Software**
 
