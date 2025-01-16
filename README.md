@@ -12,7 +12,7 @@ OpenShift installer, Pull secret key to be used in the installation yaml file, C
 
 <img src="https://raw.githubusercontent.com/mehmeterdoganozturk/OCP-BareMetal-Install/main/images/cluster01.png" width="600"/>
 <img src="https://raw.githubusercontent.com/mehmeterdoganozturk/OCP-BareMetal-Install/main/images/cluster02.png" width="600"/>
-<img src="https://raw.githubusercontent.com/mehmeterdoganozturk/OCP-BareMetal-Install/main/images/cluster03.png" width="600"/>
+![alt text](./images/cluster03.png)
 
 **Download Software**
 
