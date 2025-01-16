@@ -6,6 +6,9 @@
 
 **Architecture Diagram**
 
+**Requirements to be used for openshift bare metal installation.** <br/>
+Retrieved from https://console.redhat.com/openshift/install/metal/user-provisioned 
+OpenShift installer, Pull secret key to be used in the installation yaml file, Command line interface CoreOS (RHCOS) ISO files are downloaded.
 
 **Download Software**
 
