@@ -11,7 +11,7 @@ Retrieved from https://console.redhat.com/openshift/install/metal/user-provision
 OpenShift installer, Pull secret key to be used in the installation yaml file, Command line interface CoreOS (RHCOS) ISO files are downloaded.
 
 ![alt text](images/04.png)
-![alt text](cluster1.png)
+![alt text](1.png)
 ![alt text](cluster2.png)
 
 **Download Software**
