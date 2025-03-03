@@ -1,5 +1,3 @@
-Aşağıda istediğin senaryoya uygun bir **ServiceAccount**, **Deployment**, ve gerekli **Role/RoleBinding** tanımlarını içeren YAML dosyalarını oluşturuyorum.
-
 ## 🎯 **Hedefler**
 
 1.  `yetkiliuser` adında bir **Service Account** tanımlayacağız.
