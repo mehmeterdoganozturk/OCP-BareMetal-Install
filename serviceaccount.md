@@ -12,9 +12,13 @@
 
 Bu Service Account, pod'un root çalışmasını ve belirli yetkilere sahip olmasını sağlayacak.
 
-&nbsp;
-
-`apiVersion: v1kind: ServiceAccountmetadata: name: yetkiliuser namespace: linux`
+```sh
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: yetkiliuser
+  namespace: linux
+```
 
 Bu service account'ı oluşturmak için şu komutu kullanabilirsin:
 
