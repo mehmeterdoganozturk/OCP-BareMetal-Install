@@ -37,9 +37,31 @@ Bu deployment:
 - İçinde **NTP servisi kurulur** (`ntp` paketi ile).
 - Bir döngü içinde çalışarak, NTP servisini restart etme yetkisine sahip olur.
 
-&nbsp;
-
-`apiVersion: apps/v1kind: Deploymentmetadata: name: ubuntu-ntp namespace: linuxspec: replicas: 1 selector: matchLabels: app: ubuntu-ntp template: metadata: labels: app: ubuntu-ntp spec: serviceAccountName: yetkiliuser # Kullanılacak Service Account securityContext: runAsUser: 0 # Root yetkisi ile çalıştır containers: - name: ubuntu-container image: ubuntu:latest command: ["/bin/bash", "-c", "apt update && apt install -y ntp && while true; do sleep 3600; done"] securityContext: privileged: true # Full root yetkisi allowPrivilegeEscalation: true capabilities: add: ["NET_ADMIN", "SYS_TIME"] # NTP için gerekli yetkiler`
+```sh
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ubuntu-deployment
+  namespace: linux
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ubuntu
+  template:
+    metadata:
+      labels:
+        app: ubuntu
+    spec:
+      serviceAccountName: yetkiliuser  # Burada service account'ı tanımlıyoruz
+      containers:
+        - name: ubuntu
+          image: ubuntu:latest
+          command: ["/bin/bash", "-c", "while true; do sleep 30; done;"]
+          securityContext:
+            runAsUser: 0  # root kullanıcısı olarak çalışacak
+            runAsGroup: 0
+```
 
 Bunu oluşturmak için:
 
