@@ -1,5 +1,5 @@
 # OpenShift'te Pod Root Yetkilendirmesi ve Güvenli Kullanımı
-#https://chatgpt.com/canvas/shared/67c8a6905210819188fa2f02838d50ae
+# https://chatgpt.com/canvas/shared/67c8a6905210819188fa2f02838d50ae
 
 ## 📌 İki Deployment YAML Dosyasının Karşılaştırılması
 
