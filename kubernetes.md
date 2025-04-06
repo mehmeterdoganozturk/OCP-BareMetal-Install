@@ -27,6 +27,16 @@ Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğüm
     * Worker 1: `192.168.57.111`
     * Worker 2: `192.168.57.112`
     * Worker 3: `192.168.57.113`
+
+    ```
+    * sudo hostnamectl set-hostname haproxy.lab.local
+    * sudo hostnamectl set-hostname master1.lab.local
+    * sudo hostnamectl set-hostname master2.lab.local
+    * sudo hostnamectl set-hostname master3.lab.local
+    * sudo hostnamectl set-hostname worker1.lab.local
+    * sudo hostnamectl set-hostname worker2.lab.local
+    * sudo hostnamectl set-hostname worker3.lab.local
+    ```
 3.  **Hostname & /etc/hosts Ayarları:** Her sunucuya anlamlı bir hostname verin ve tüm sunuculardaki `/etc/hosts` dosyasını aşağıdaki gibi güncelleyin:
     ```
     192.168.57.100 haproxy haproxy.lab.local
