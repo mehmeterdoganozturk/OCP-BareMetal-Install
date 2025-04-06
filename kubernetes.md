@@ -20,22 +20,22 @@ Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğüm
 
 1.  **İşletim Sistemi:** Ubuntu 24.04 LTS Server.
 2.  **Statik IP Adresleri (Örnek):**
-    * HAProxy: `192.168.1.100` (**API Endpoint**)
-    * Master 1: `192.168.1.101`
-    * Master 2: `192.168.1.102`
-    * Master 3: `192.168.1.103`
-    * Worker 1: `192.168.1.111`
-    * Worker 2: `192.168.1.112`
-    * Worker 3: `192.168.1.113`
+    * HAProxy: `192.168.57.100` (**API Endpoint**)
+    * Master 1: `192.168.57.101`
+    * Master 2: `192.168.57.102`
+    * Master 3: `192.168.57.103`
+    * Worker 1: `192.168.57.111`
+    * Worker 2: `192.168.57.112`
+    * Worker 3: `192.168.57.113`
 3.  **Hostname & /etc/hosts Ayarları:** Her sunucuya anlamlı bir hostname verin ve tüm sunuculardaki `/etc/hosts` dosyasını aşağıdaki gibi güncelleyin:
     ```
-    192.168.1.100 haproxy haproxy.lab.local
-    192.168.1.101 master1 master1.lab.local
-    192.168.1.102 master2 master2.lab.local
-    192.168.1.103 master3 master3.lab.local
-    192.168.1.111 worker1 worker1.lab.local
-    192.168.1.112 worker2 worker2.lab.local
-    192.168.1.113 worker3 worker3.lab.local
+    192.168.57.100 haproxy haproxy.lab.local
+    192.168.57.101 master1 master1.lab.local
+    192.168.57.102 master2 master2.lab.local
+    192.168.57.103 master3 master3.lab.local
+    192.168.57.111 worker1 worker1.lab.local
+    192.168.57.112 worker2 worker2.lab.local
+    192.168.57.113 worker3 worker3.lab.local
     ```
 4.  **Gerekli Portlar (Firewall İzinleri):**
     * **Master Düğümler:** TCP 6443, 2379-2380, 10250, 10257, 10259
@@ -85,9 +85,9 @@ Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğüm
         option tcp-check
         balance roundrobin
         # Kendi Master IP adreslerinizi buraya girin:
-        server master1 192.168.1.101:6443 check fall 3 rise 2
-        server master2 192.168.1.102:6443 check fall 3 rise 2
-        server master3 192.168.1.103:6443 check fall 3 rise 2
+        server master1 192.168.57.101:6443 check fall 3 rise 2
+        server master2 192.168.57.102:6443 check fall 3 rise 2
+        server master3 192.168.57.103:6443 check fall 3 rise 2
     ```
 3.  **Servis Yönetimi:**
     ```bash
@@ -159,7 +159,7 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     ```bash
     # HAProxy IP'nizi ve seçtiğiniz Pod Network CIDR'ını kullanın (Calico için 10.244.0.0/16)
     sudo kubeadm init \
-      --control-plane-endpoint "192.168.1.100:6443" \
+      --control-plane-endpoint "192.168.57.100:6443" \
       --upload-certs \
       --pod-network-cidr=10.244.0.0/16
     ```
@@ -176,7 +176,7 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
 1.  `master1`'deki `kubeadm init` çıktısından aldığınız **Master join komutunu** `master2` ve `master3` üzerinde `sudo` ile çalıştırın. Komut şuna benzer olacaktır:
     ```bash
     # ÖRNEKTİR! Kendi çıktınızdaki komutu kullanın!
-    sudo kubeadm join 192.168.1.100:6443 --token <token> \
+    sudo kubeadm join 192.168.57.100:6443 --token <token> \
         --discovery-token-ca-cert-hash sha256:<hash> \
         --control-plane --certificate-key <certificate_key>
     ```
@@ -194,7 +194,7 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
 1.  `master1`'deki `kubeadm init` çıktısından aldığınız **Worker join komutunu** `worker1`, `worker2` ve `worker3` üzerinde `sudo` ile çalıştırın. Komut şuna benzer olacaktır:
     ```bash
     # ÖRNEKTİR! Kendi çıktınızdaki komutu kullanın!
-    sudo kubeadm join 192.168.1.100:6443 --token <token> \
+    sudo kubeadm join 192.168.57.100:6443 --token <token> \
         --discovery-token-ca-cert-hash sha256:<hash>
     ```
 
