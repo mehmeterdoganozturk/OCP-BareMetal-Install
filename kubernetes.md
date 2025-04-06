@@ -28,6 +28,21 @@ Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğüm
     * Worker 2: `192.168.57.112`
     * Worker 3: `192.168.57.113`
 
+```
+network:
+  version: 2
+  ethernets:
+    enp0s3:
+      dhcp4: true
+    enp0s8:
+      dhcp4: no
+      addresses:
+        - 192.168.57.102/24
+      # gateway4: 192.168.57.1
+      # nameservers:
+      #   addresses: [8.8.8.8, 1.1.1.1]
+```
+
     ```
     alias update='sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt autoremove -y'
     ```
