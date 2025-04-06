@@ -18,18 +18,7 @@ Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğüm
 
 ## Adım 1: Ön Hazırlıklar (Tüm Sunucular: HAProxy, 3 Master, 3 Worker)
 
-1.  **İşletim Sistemi:** Ubuntu 24.04 LTS Server.
-2.  **Statik IP Adresleri (Örnek):**
-    * HAProxy: `192.168.57.100` (**API Endpoint**)
-    * Master 1: `192.168.57.101`
-    * Master 2: `192.168.57.102`
-    * Master 3: `192.168.57.103`
-    * Worker 1: `192.168.57.111`
-    * Worker 2: `192.168.57.112`
-    * Worker 3: `192.168.57.113`
-  
-  ```
-  network:
+network:
   version: 2
   ethernets:
     enp0s3:
@@ -41,7 +30,17 @@ Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğüm
       # gateway4: 192.168.57.1
       # nameservers:
       #   addresses: [8.8.8.8, 1.1.1.1]
-  ```
+
+1.  **İşletim Sistemi:** Ubuntu 24.04 LTS Server.
+2.  **Statik IP Adresleri (Örnek):**
+    * HAProxy: `192.168.57.100` (**API Endpoint**)
+    * Master 1: `192.168.57.101`
+    * Master 2: `192.168.57.102`
+    * Master 3: `192.168.57.103`
+    * Worker 1: `192.168.57.111`
+    * Worker 2: `192.168.57.112`
+    * Worker 3: `192.168.57.113`
+
 
 
     ```
