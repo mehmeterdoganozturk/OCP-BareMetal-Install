@@ -29,6 +29,10 @@ Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğüm
     * Worker 3: `192.168.57.113`
 
     ```
+    alias update='sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get dist-upgrade -y && sudo apt autoremove -y'
+    ```
+
+    ```
     sudo hostnamectl set-hostname haproxy.lab.local
     sudo hostnamectl set-hostname master1.lab.local
     sudo hostnamectl set-hostname master2.lab.local
