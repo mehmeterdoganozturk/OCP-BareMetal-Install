@@ -170,18 +170,12 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     ```
 5.  **Kubernetes Paketlerini Kurma (kubeadm, kubelet, kubectl):**
     ```bash
-    sudo apt update
-    sudo apt install -y apt-transport-https ca-certificates curl gpg
-
-    # Google Cloud public signing key
-    curl -fsSL [https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key](https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key) | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
-    # Kubernetes apt repository (v1.29)
-    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] [https://pkgs.k8s.io/core:/stable:/v1.29/deb/](https://pkgs.k8s.io/core:/stable:/v1.29/deb/) /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
     sudo apt update
     sudo apt install -y kubelet kubeadm kubectl
-    sudo apt-mark hold kubelet kubeadm kubectl # Versiyonları sabitle
+    sudo systemctl enable kubelet
+    sudo apt-mark hold kubelet kubeadm 
     ```
 
 ## Adım 4: Kontrol Düzlemini Başlatma (Sadece İlk Master Düğüm - master1 Üzerinde)
