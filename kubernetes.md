@@ -293,4 +293,20 @@ subjects:
   name: calico-cni-plugin
   namespace: kube-system
 ```
+Yeni token alma ve create işlemi
+```
+kubeadm token list
+kubeadm token create
+kubeadm join <control-plane-ip>:<control-plane-port> --token <your-token> --discovery-token-ca-cert-hash sha256:<hash>
+kubeadm token create --role control-plane
+
+***HASH BULMA ***
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | \
+    sha256sum | \
+    awk '{print "sha256:" $1}'
+************************************
+kubeadm token create --print-join-command
+kubeadm join <control-plane-ip>:<control-plane-port> --token <your-token> --discovery-token-ca-cert-hash sha256:<hash>
+kubeadm join 192.168.1.100:6443 --token abcdef.0123456789abcdef --discovery-token-ca-cert-hash sha256:3b77e6e34a573fd12b9bfb7fdbb1fc1b1f8b33be34ac98d83a75a032be0167cc
+```
 
