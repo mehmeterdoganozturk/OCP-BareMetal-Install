@@ -170,6 +170,12 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     ```
 5.  **Kubernetes Paketlerini Kurma (kubeadm, kubelet, kubectl):**
     ```bash
+    sudo apt-get install curl ca-certificates apt-transport-https  -y
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    sudo apt update
+    sudo apt install kubelet kubeadm kubectl -y
+    -----------------------------------------------------------------------
     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | sudo gpg --dearmor -o /usr/share/keyrings/kubernetes-archive-keyring.gpg
     echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
     sudo apt update
