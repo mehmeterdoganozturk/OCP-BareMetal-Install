@@ -263,3 +263,34 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
 * **Güvenlik:** Network Policies, RBAC, Secrets yönetimi.
 
 Bu adımları takip ederek HA Kubernetes cluster'ınızı başarıyla kurabilirsiniz.
+```
+kubectl delete pod -n kube-system -l k8s-app=kube-dns
+kubectl get pods -n kube-system -l k8s-app=kube-dns
+nano calico-rbac-fix.yaml
+```
+
+```
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: calico-cni-plugin
+rules:
+- apiGroups: ["crd.projectcalico.org"]
+  resources: ["clusterinformations"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: calico-cni-plugin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: calico-cni-plugin
+subjects:
+- kind: ServiceAccount
+  name: calico-cni-plugin
+  namespace: kube-system
+```
+
