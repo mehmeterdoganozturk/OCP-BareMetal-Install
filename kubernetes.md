@@ -134,6 +134,10 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
 1.  **Swap'ı Devre Dışı Bırakma:**
     ```bash
     ***************************************************************************************************
+    buradan tamamen kapat
+    sudo nano /etc/fstab
+    # /swap.img       none    swap    sw      0       0
+    --------------------------------------------------------------
     # 1. Swap'ı geçici olarak kapat
     sudo swapoff -a
 
