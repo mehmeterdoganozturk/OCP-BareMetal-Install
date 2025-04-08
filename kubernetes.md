@@ -133,6 +133,20 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
 
 1.  **Swap'ı Devre Dışı Bırakma:**
     ```bash
+    ***************************************************************************************************
+    # 1. Swap'ı geçici olarak kapat
+    sudo swapoff -a
+
+    # 2. /etc/fstab dosyasındaki swap satırını yorum satırına al (swap'ı açmamayı sağlamak için)
+    sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
+
+    # 3. vm.swappiness değerini 0 yaparak swap kullanımını engelle
+    echo "vm.swappiness=0" | sudo tee -a /etc/sysctl.conf
+
+    # 4. Yaptığın değişiklikleri uygulamak için sysctl.conf dosyasını tekrar yükle
+    sudo sysctl -p
+    free -h
+    ***************************************************************************************************
     sudo swapoff -a
     sudo sed -i '/ swap / s/^\(.*\)$/#\1/g' /etc/fstab
     ```
