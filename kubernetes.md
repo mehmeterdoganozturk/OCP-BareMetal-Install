@@ -244,6 +244,17 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
         --discovery-token-ca-cert-hash sha256:<hash>
     ```
 
+    ```
+    # Worker1 node'ına worker rolü ekle
+    kubectl label nodes worker1.lab.local node-role.kubernetes.io/worker=worker
+
+    # Worker2 node'ına worker rolü ekle
+    kubectl label nodes worker2.lab.local node-role.kubernetes.io/worker=worker
+
+    # Worker3 node'ına worker rolü ekle
+    kubectl label nodes worker3.lab.local node-role.kubernetes.io/worker=worker
+    ```
+    
 ## Adım 8: Kurulumu Doğrulama (Bir Master Düğüm Üzerinde)
 
 1.  **Düğüm Durumu:**
