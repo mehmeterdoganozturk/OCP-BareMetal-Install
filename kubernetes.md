@@ -83,7 +83,57 @@ network:
     sudo apt update
     sudo apt install haproxy -y
     ```
-2.  **Yapılandırma (`/etc/haproxy/haproxy.cfg`):**
+    **HA-Proxy Dashboard**
+    ```
+    global
+    log /dev/log local0
+    log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
+    maxconn 2048
+
+defaults
+    log     global
+    mode    tcp
+    option  tcplog
+    option  dontlognull
+    timeout connect 5000ms
+    timeout client  50000ms
+    timeout server  50000ms
+    timeout check   3s
+
+# === Kubernetes API Load Balancer ===
+frontend kubernetes-api
+    bind *:6443
+    mode tcp
+    option tcplog
+    default_backend kubernetes-master-nodes
+
+backend kubernetes-master-nodes
+    mode tcp
+    balance roundrobin
+    option tcp-check
+    default-server inter 3s fall 3 rise 2
+    server master1 10.100.0.24:6443 check
+    server master2 10.100.0.25:6443 check
+    server master3 10.100.0.26:6443 check
+
+# === HAProxy Web Dashboard ===
+listen stats
+    bind *:9000
+    mode http
+    stats enable
+    stats uri /
+    stats refresh 10s
+    stats show-node
+    stats auth admin:MyS3cr3tPa$$  # güçlü ve değiştirilmiş bir şifre
+    ```
+    
+3.  **Yapılandırma (`/etc/haproxy/haproxy.cfg`):**
     ```cfg
     global
         log /dev/log    local0
@@ -120,7 +170,7 @@ network:
         server master2 192.168.57.102:6443 check fall 3 rise 2
         server master3 192.168.57.103:6443 check fall 3 rise 2
     ```
-3.  **Servis Yönetimi:**
+4.  **Servis Yönetimi:**
     ```bash
     sudo systemctl enable haproxy
     sudo systemctl restart haproxy
