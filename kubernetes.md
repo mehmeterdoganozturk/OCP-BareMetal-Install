@@ -338,4 +338,13 @@ kubeadm token create --print-join-command
 kubeadm join <control-plane-ip>:<control-plane-port> --token <your-token> --discovery-token-ca-cert-hash sha256:<hash>
 kubeadm join 192.168.1.100:6443 --token abcdef.0123456789abcdef --discovery-token-ca-cert-hash sha256:3b77e6e34a573fd12b9bfb7fdbb1fc1b1f8b33be34ac98d83a75a032be0167cc
 ```
+## etcd Backup/Restore Mekanizması
+```
+ETCDCTL_API=3 etcdctl \
+--endpoints=https://127.0.0.1:2379 \
+--cacert=/etc/kubernetes/pki/etcd/ca.crt \
+--cert=/etc/kubernetes/pki/etcd/server.crt \
+--key=/etc/kubernetes/pki/etcd/server.key \
+snapshot save /root/etcd-backup.db
+```
 
