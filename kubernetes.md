@@ -106,8 +106,7 @@ network:
         timeout client  50000ms
         timeout server  50000ms
         timeout check   3s
-
-# === Kubernetes API Load Balancer ===
+    
     frontend kubernetes-api
         bind *:6443
         mode tcp
@@ -123,7 +122,6 @@ network:
         server master2 10.100.0.25:6443 check
       server master3 10.100.0.26:6443 check
 
-# === HAProxy Web Dashboard ===
     listen stats
         bind *:9000
         mode http
