@@ -348,10 +348,10 @@ ETCDCTL_API=3 etcdctl \
 snapshot save /root/etcd-backup.db
 ```
 
-💡 Özetle:
-✅ RBAC → Kubernetes’te erişim kontrolü
-🛡️ Role/ClusterRole → Yetkilendirme kuralları
-🔗 RoleBinding/ClusterRoleBinding → Kullanıcıyla eşleştirme
-🧰 MetalLB, bare-metal Kubernetes için LoadBalancer IP'si sağlamak içindir
-⚖️ HAProxy, API sunucularına gelen trafiği dağıtmak için (yük dengeleme)
+* **💡 Özetle:
+* **✅ RBAC → Kubernetes’te erişim kontrolü
+* **🛡️ Role/ClusterRole → Yetkilendirme kuralları
+* **🔗 RoleBinding/ClusterRoleBinding → Kullanıcıyla eşleştirme
+* **🧰 MetalLB, bare-metal Kubernetes için LoadBalancer IP'si sağlamak içindir
+* **⚖️ HAProxy, API sunucularına gelen trafiği dağıtmak için (yük dengeleme)
 
