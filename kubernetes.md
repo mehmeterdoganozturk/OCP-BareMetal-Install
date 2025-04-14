@@ -212,6 +212,11 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     overlay
     br_netfilter
     EOF
+    -------------------------------------------------------------------------------------------------
+    Kubernetes için gerekli olan iki önemli kernel modülünü yükler (overlay ve br_netfilter).
+    sistem yeniden başlatıldığında bu modüllerin otomatik yüklenmesini sağlar.
+    -------------------------------------------------------------------------------------------------
+   
     ```
 3.  **Sysctl Ayarları:**
     ```bash
