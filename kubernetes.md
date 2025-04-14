@@ -3,7 +3,7 @@
 Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğümden oluşan, önünde HAProxy ile yüksek erişilebilirlik (HA) sağlayan bir Kubernetes cluster'ının `kubeadm` ile nasıl kurulacağını adım adım açıklamaktadır.
 
 <p float="left">
-  <img src="./images/kubernetes-diyagram.png" alt="Kubernetes Diyagramı" width="400" style="margin-right: 50px;"/>
+  <img src="./images/kubernetes-diyagram.png" alt="Kubernetes Diyagramı" width="400" style="margin-right: 300px;"/>
   <img src="./images/kubernetes-diyagram2.png" alt="Kubernetes Diyagramı2" width="400"/>
 </p>
 
