@@ -282,8 +282,17 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
       --upload-certs \
       --pod-network-cidr=10.244.0.0/16
     ```
-2.  **ÖNEMLİ:** Komut çıktısındaki `kubeadm join` komutlarını (hem master hem worker için) ve `kubectl` yapılandırma adımlarını **kaydedin**.
-3.  **kubectl'i Yapılandır:** (Çıktıdaki adımları uygulayın)
+    ----------------------------------------------------
+    
+    --control-plane-endpoint "192.168.57.100:6443" Bu, kümeye dışarıdan erişimde kullanılacak sanal adresi belirtir.
+    Genellikle bu adresin arkasında bir Load Balancer (örneğin senin ortamında HAProxy) olur. Diğer kontrol düzlemi düğümleri ve worker node'lar bu adrese bağlanır.
+    192.168.57.100: Kontrol düzlemi düğümünün (veya birden fazla kontrol düzlemi düğümü varsa, bunların önündeki bir yük dengeleyicinin - load balancer) IP adresi veya DNS adıdır. Diğer düğümler bu     
+    adres üzerinden API sunucusu ile konuşur.
+    6443: Kubernetes API sunucusunun varsayılan güvenli (HTTPS) portudur.
+
+    --------------------------------------------------------------
+3.  **ÖNEMLİ:** Komut çıktısındaki `kubeadm join` komutlarını (hem master hem worker için) ve `kubectl` yapılandırma adımlarını **kaydedin**.
+4.  **kubectl'i Yapılandır:** (Çıktıdaki adımları uygulayın)
     ```bash
     mkdir -p $HOME/.kube
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
