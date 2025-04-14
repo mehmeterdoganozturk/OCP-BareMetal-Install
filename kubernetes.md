@@ -213,14 +213,14 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     br_netfilter
     EOF
     -------------------------------------------------------------------------------------------------
-    Kubernetes için gerekli olan iki önemli kernel modülünü yükler (overlay ve br_netfilter).
+    * Kubernetes için gerekli olan iki önemli kernel modülünü yükler (overlay ve br_netfilter).
     sistem yeniden başlatıldığında bu modüllerin otomatik yüklenmesini sağlar.
 
-    overlay modülü, OverlayFS adı verilen bir dosya sistemi türünü destekler.
+    * overlay modülü, OverlayFS adı verilen bir dosya sistemi türünü destekler.
     Kubernetes, özellikle konteyner runtime'ları (örn. containerd, Docker) OverlayFS’yi kullanarak container dosya sistemlerini 
     katmanlı şekilde yönetir.
 
-    br_netfilter, Bu modül, Linux bridge’leri üzerinden geçen trafik için iptables (netfilter) kurallarının uygulanmasını sağlar.
+    * br_netfilter, Bu modül, Linux bridge’leri üzerinden geçen trafik için iptables (netfilter) kurallarının uygulanmasını sağlar.
     Kubernetes, pod’lar arası ağ trafiğini yönetmek için iptables ve bridge ağlarını birlikte kullanır.
     Bu modül olmadan bazı ağ kuralları düzgün çalışmaz ve pod’lar arasında iletişim sorunları yaşanabilir.
     -------------------------------------------------------------------------------------------------
@@ -284,11 +284,11 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     ```
     ----------------------------------------------------
     
-    --control-plane-endpoint "192.168.57.100:6443" Bu, kümeye dışarıdan erişimde kullanılacak sanal adresi belirtir.
-    Genellikle bu adresin arkasında bir Load Balancer (örneğin senin ortamında HAProxy) olur. Diğer kontrol düzlemi düğümleri ve worker node'lar bu adrese bağlanır.
-    192.168.57.100: Kontrol düzlemi düğümünün (veya birden fazla kontrol düzlemi düğümü varsa, bunların önündeki bir yük dengeleyicinin - load balancer) IP adresi veya DNS adıdır. Diğer düğümler bu     
+    * --control-plane-endpoint "192.168.57.100:6443" Bu, kümeye dışarıdan erişimde kullanılacak sanal adresi belirtir.
+    * Genellikle bu adresin arkasında bir Load Balancer (örneğin senin ortamında HAProxy) olur. Diğer kontrol düzlemi düğümleri ve worker node'lar bu adrese bağlanır.
+    * 192.168.57.100: Kontrol düzlemi düğümünün (veya birden fazla kontrol düzlemi düğümü varsa, bunların önündeki bir yük dengeleyicinin - load balancer) IP adresi veya DNS adıdır. Diğer düğümler bu    
     adres üzerinden API sunucusu ile konuşur.
-    6443: Kubernetes API sunucusunun varsayılan güvenli (HTTPS) portudur.
+    * 6443: Kubernetes API sunucusunun varsayılan güvenli (HTTPS) portudur.
 
     --------------------------------------------------------------
 3.  **ÖNEMLİ:** Komut çıktısındaki `kubeadm join` komutlarını (hem master hem worker için) ve `kubectl` yapılandırma adımlarını **kaydedin**.
@@ -298,7 +298,8 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
     ```
-    /etc/kubernetes/admin.conf: Bu dosya, kubeadm init tarafından oluşturulan Kubernetes API erişim ayarlarını içerir. kubectl bu dosyayı okuyarak hangi cluster’a bağlanacağını, hangi kullanıcı ve sertifikayla bağlanacağını bilir.
+    * /etc/kubernetes/admin.conf: Bu dosya, kubeadm init tarafından oluşturulan Kubernetes API erişim ayarlarını içerir.
+    * kubectl bu dosyayı okuyarak hangi cluster’a bağlanacağını, hangi kullanıcı ve sertifikayla bağlanacağını bilir.
 
 
 
