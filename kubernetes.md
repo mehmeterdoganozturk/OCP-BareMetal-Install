@@ -298,6 +298,9 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
     sudo chown $(id -u):$(id -g) $HOME/.kube/config
     ```
+    /etc/kubernetes/admin.conf: Bu dosya, kubeadm init tarafından oluşturulan Kubernetes API erişim ayarlarını içerir. kubectl bu dosyayı okuyarak hangi cluster’a bağlanacağını, hangi kullanıcı ve sertifikayla bağlanacağını bilir.
+
+
 
 ## Adım 5: Diğer Master Düğümleri Cluster'a Ekleme (master2 ve master3 Üzerinde)
 
