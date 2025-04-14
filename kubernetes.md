@@ -1,5 +1,8 @@
 # Ubuntu 24.04 Üzerine HA Kubernetes Cluster Kurulumu (3 Master, 3 Worker + HAProxy)
 
+![Açıklama](./images/kubernetes-diyagram.png)
+
+
 Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğümden oluşan, önünde HAProxy ile yüksek erişilebilirlik (HA) sağlayan bir Kubernetes cluster'ının `kubeadm` ile nasıl kurulacağını adım adım açıklamaktadır.
 
 ## Genel Mimari
