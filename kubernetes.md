@@ -4,9 +4,9 @@ Bu doküman, Ubuntu 24.04 LTS sunucular kullanarak 3 Master ve 3 Worker düğüm
 
 <table>
   <tr>
-    <td><img src="./images/kubernetes-diyagram.png" alt="Kubernetes Diyagramı" width="400"/></td>
+    <td><img src="./images/kubernetes-diyagram.png" alt="Kubernetes Diyagramı" width="800"/></td>
     <td style="width: 50px;"></td>
-    <td><img src="./images/kubernetes-diyagram2.png" alt="Kubernetes Diyagramı2" width="400"/></td>
+    <td><img src="./images/kubernetes-diyagram2.png" alt="Kubernetes Diyagramı2" width="800"/></td>
   </tr>
 </table>
 
