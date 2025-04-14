@@ -215,6 +215,14 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     -------------------------------------------------------------------------------------------------
     Kubernetes için gerekli olan iki önemli kernel modülünü yükler (overlay ve br_netfilter).
     sistem yeniden başlatıldığında bu modüllerin otomatik yüklenmesini sağlar.
+
+    overlay modülü, OverlayFS adı verilen bir dosya sistemi türünü destekler.
+    Kubernetes, özellikle konteyner runtime'ları (örn. containerd, Docker) OverlayFS’yi kullanarak container dosya sistemlerini 
+    katmanlı şekilde yönetir.
+
+    br_netfilter, Bu modül, Linux bridge’leri üzerinden geçen trafik için iptables (netfilter) kurallarının uygulanmasını sağlar.
+    Kubernetes, pod’lar arası ağ trafiğini yönetmek için iptables ve bridge ağlarını birlikte kullanır.
+    Bu modül olmadan bazı ağ kuralları düzgün çalışmaz ve pod’lar arasında iletişim sorunları yaşanabilir.
     -------------------------------------------------------------------------------------------------
    
     ```
@@ -227,6 +235,14 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     EOF
 
     sudo sysctl --system
+
+    -------------------------------------------------------------------------------------------------
+    Bu komutlar da Kubernetes’in ağ (networking) bileşenlerinin doğru çalışması için gerekli olan kernel parametrelerini ayarlıyor.
+    net.bridge.bridge-nf-call-iptables = 1, Bu ayar, Linux köprü ağı üzerinden geçen trafiğin iptables kurallarına takılmasını sağlar.
+    net.ipv4.ip_forward = 1, Bu, IP yönlendirmesini (IP forwarding) etkinleştirir. Bir pod’dan çıkan trafiğin başka bir pod’a ya da servise yönlendirilmesi için gereklidir.
+    Bu açık değilse pod’lar ya da servisler birbirine ulaşamaz.
+    
+    -------------------------------------------------------------------------------------------------
     ```
 4.  **Container Runtime Kurulumu (containerd):**
     ```bash
