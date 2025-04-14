@@ -237,10 +237,10 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     sudo sysctl --system
 
     -------------------------------------------------------------------------------------------------
-    Bu komutlar da Kubernetes’in ağ (networking) bileşenlerinin doğru çalışması için gerekli olan kernel parametrelerini ayarlıyor.
-    net.bridge.bridge-nf-call-iptables = 1, Bu ayar, Linux köprü ağı üzerinden geçen trafiğin iptables kurallarına takılmasını sağlar.
-    net.ipv4.ip_forward = 1, Bu, IP yönlendirmesini (IP forwarding) etkinleştirir. Bir pod’dan çıkan trafiğin başka bir pod’a ya da servise yönlendirilmesi için gereklidir.
-    Bu açık değilse pod’lar ya da servisler birbirine ulaşamaz.
+    * Bu komutlar da Kubernetes’in ağ (networking) bileşenlerinin doğru çalışması için gerekli olan kernel parametrelerini ayarlıyor.
+    * net.bridge.bridge-nf-call-iptables = 1, Bu ayar, Linux köprü ağı üzerinden geçen trafiğin iptables kurallarına takılmasını sağlar.
+    * net.ipv4.ip_forward = 1, Bu, IP yönlendirmesini (IP forwarding) etkinleştirir. Bir pod’dan çıkan trafiğin başka bir pod’a ya da servise yönlendirilmesi için gereklidir.
+    * Bu açık değilse pod’lar ya da servisler birbirine ulaşamaz.
     
     -------------------------------------------------------------------------------------------------
     ```
