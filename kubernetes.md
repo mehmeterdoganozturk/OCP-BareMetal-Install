@@ -446,42 +446,43 @@ snapshot save /root/etcd-backup.db
 * 🧰 MetalLB, bare-metal Kubernetes için LoadBalancer IP'si sağlamak içindir
 * ⚖️ HAProxy, API sunucularına gelen trafiği dağıtmak için (yük dengeleme)
 
------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
 
-🔥 Kubernetes Cluster için Açılması Gereken Portlar (Ubuntu 24.04 UFW/IPTables için)
+* 🔥 Kubernetes Cluster için Açılması Gereken Portlar (Ubuntu 24.04 UFW/IPTables için)
 
-🧠 Tüm Node’larda Ortak Açılması Gereken Portlar
+* 🧠 Tüm Node’larda Ortak Açılması Gereken Portlar
 Kubernetes bileşenlerinin birbiriyle konuşabilmesi için hepsinde açık olmalı
 
 
-Port	        Protokol	        Açıklama
-10250	        TCP	                Kubelet API – tüm node’larda olmalı
-30000-32767	  TCP	                NodePort servis tipi için (opsiyonel)
-8472	        UDP	                Calico VXLAN overlay ağı için
-51820/51821	  UDP	                Calico WireGuard (şifreleme) – opsiyonel
-179	          TCP	                Calico BGP (eğer kullanılıyorsa) – opsiyonel
+* Port	        Protokol	        Açıklama
+* 10250	        TCP	                Kubelet API – tüm node’larda olmalı
+* 30000-32767	  TCP	                NodePort servis tipi için (opsiyonel)
+* 8472	        UDP	                Calico VXLAN overlay ağı için
+* 51820/51821	  UDP	                Calico WireGuard (şifreleme) – opsiyonel
+* 179	          TCP	                Calico BGP (eğer kullanılıyorsa) – opsiyonel
 
-👑 Master Node’larda Açılması Gereken Ekstra Portlar
+* 👑 Master Node’larda Açılması Gereken Ekstra Portlar
 
-Port	        Protokol	        Açıklama
-6443	        TCP	                Kubernetes API server (kube-apiserver)
-2379-2380	    TCP	                etcd cluster (sadece masterlar arası)
-10251	        TCP	                kube-scheduler
-10252	        TCP	                kube-controller-manager
-10257	        TCP	                kontrol düzeyi için kube-controller-manager web arayüzü
-10259	        TCP	                kontrol düzeyi için kube-scheduler web arayüzü
+* Port	        Protokol	        Açıklama
+* 6443	        TCP	                Kubernetes API server (kube-apiserver)
+* 2379-2380	    TCP	                etcd cluster (sadece masterlar arası)
+* 10251	        TCP	                kube-scheduler
+* 10252	        TCP	                kube-controller-manager
+* 10257	        TCP	                kontrol düzeyi için kube-controller-manager web arayüzü
+* 10259	        TCP	                kontrol düzeyi için kube-scheduler web arayüzü
 
-Etcd sadece master’lar arası konuşur. Workerlar erişmemeli.
+* Etcd sadece master’lar arası konuşur. Workerlar erişmemeli.
 
-⚙️ Worker Node’larda Açılması Gereken Ekstra Portlar
-Port |       Protokol |        Açıklama
-10255 |       TCP |               Kubelet readonly API (eğer etkinse – kubeadm’de genellikle kapalı)
+* ⚙️ Worker Node’larda Açılması Gereken Ekstra Portlar
 
-🛡 HAProxy veya Load Balancer Node (Eğer Ayrıysa)
-Eğer master’ların önünde bir external Load Balancer (örneğin HAProxy) varsa:
+* Port |       Protokol |        Açıklama
+* 10255 |       TCP |               Kubelet readonly API (eğer etkinse – kubeadm’de genellikle kapalı)
 
-Port	       Protokol	         Açıklama
-6443	       TCP	                Kubernetes API server trafiğini master node’lara yönlendirir
+* 🛡 HAProxy veya Load Balancer Node (Eğer Ayrıysa)
+* Eğer master’ların önünde bir external Load Balancer (örneğin HAProxy) varsa:
+
+* Port	       Protokol	         Açıklama
+* 6443	       TCP	                Kubernetes API server trafiğini master node’lara yönlendirir
 
 -----------------------------------------------------------------------------------------------------
 
