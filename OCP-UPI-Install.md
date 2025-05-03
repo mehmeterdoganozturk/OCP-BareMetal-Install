@@ -227,11 +227,15 @@ kubectl version
 oc version
 ```
 -----------------------
+```bash
 tar xvf openshift-install-linux.tar.gz
-
+```
 -----------
+```bash
 git clone https://github.com/ryanhay/ocp4-metal-install
+```
 --------------------------------
+```bash
 OPTIONAL: Create a file '~/.vimrc' and paste the following (this helps with editing in vim, particularly yaml files):
 
 cat <<EOT >> ~/.vimrc
@@ -242,7 +246,9 @@ Update the preferred editor
 
 export OC_EDITOR="vim"
 export KUBE_EDITOR="vim"
+```
 ---------------------------------------------
+```bash
 dnf install httpd -y
 sed -i 's/Listen 80/Listen 0.0.0.0:8080/' /etc/httpd/conf/httpd.conf
 
@@ -254,7 +260,9 @@ systemctl enable httpd
 systemctl start httpd
 systemctl status httpd
 curl localhost:8080
+```
 ------------------------------------
+```bash
 dnf install haproxy -y
 Copy HAProxy config
 
@@ -273,8 +281,9 @@ setsebool -P haproxy_connect_any 1 # SELinux name_bind access
 systemctl enable haproxy
 systemctl start haproxy
 systemctl status haproxy
+```
 -------------------------------
-
+```bash
 dnf install nfs-utils -y
 mkdir -p /shares/registry
 chown -R nobody:nobody /shares/registry
@@ -288,9 +297,9 @@ firewall-cmd --reload
 
 systemctl enable nfs-server rpcbind
 systemctl start nfs-server rpcbind nfs-mountd
-
+```
 -----------------------------
-
+```bash
 Generate and host install files
 Generate an SSH key pair keeping all default options
 
@@ -307,7 +316,9 @@ Update the install-config.yaml with your own pull-secret and ssh key.
 Line 23 should contain the contents of your pull-secret.txt
 Line 24 should contain the contents of your 'cat ~/.ssh/id_rsa.pub'
 vim ~/ocp-install/install-config.yaml
+```
 -----------------------
+```bash
 ~/openshift-install create manifests --dir ~/ocp-install
 
 A warning is shown about making the control plane nodes schedulable. It is up to you if you want to run workloads on the Control Plane nodes. 
@@ -327,9 +338,9 @@ chown -R apache: /var/www/html/ocp4/
 chmod 755 /var/www/html/ocp4/
 
 curl localhost:8080/ocp4/
-
+```
 -------------------------------------
-
+```bash
 sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/bootstrap.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.200::192.168.22.2:255.255.255.0:ocp-bootstrap.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
 sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/master.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.201::192.168.22.2:255.255.255.0:ocp-cp-1.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
 sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/master.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.202::192.168.22.2:255.255.255.0:ocp-cp-2.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
@@ -386,3 +397,4 @@ sudo coreos-installer install /dev/sda \
   --insecure --insecure-ignition \
   --append-karg="ip=10.5.209.252::10.5.209.1:255.255.255.0:worker02.ocp.lab.local:ens192:none nameserver=10.5.209.31" \
   --append-karg=rd.neednet=1
+```
