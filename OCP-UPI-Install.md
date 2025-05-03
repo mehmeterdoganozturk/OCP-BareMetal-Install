@@ -398,3 +398,112 @@ sudo coreos-installer install /dev/sda \
   --append-karg="ip=10.5.209.252::10.5.209.1:255.255.255.0:worker02.ocp.lab.local:ens192:none nameserver=10.5.209.31" \
   --append-karg=rd.neednet=1
 ```
+******************
+```bash
+apiVersion: v1
+baseDomain: ocp.lan
+compute:
+  - hyperthreading: Enabled
+    name: worker
+    replicas: 0 # Must be set to 0 for User Provisioned Installation as worker nodes will be manually deployed.
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  replicas: 3
+metadata:
+  name: lab # Cluster name
+networking:
+  clusterNetwork:
+    - cidr: 10.128.0.0/14
+      hostPrefix: 23
+  networkType: OpenShiftSDN
+  serviceNetwork:
+    - 172.30.0.0/16
+platform:
+  none: {}
+fips: false
+pullSecret: '{"auths": ...}'
+sshKey: "ssh-ed25519 AAAA..."
+
+
+------------
+
+apiVersion: v1
+baseDomain: lab.local 
+compute: 
+- hyperthreading: Enabled 
+  name: worker
+  replicas: 0 
+controlPlane: 
+  hyperthreading: Enabled 
+  name: master
+  replicas: 3 
+metadata:
+  name: ocp 
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14 
+    hostPrefix: 23 
+  networkType: OVNKubernetes 
+  serviceNetwork: 
+  - 172.30.0.0/16
+platform:
+  none: {} 
+fips: false 
+pullSecret: '{"auths": ...}' 
+sshKey: 'ssh-ed25519 AAAA...'
+```
+********************************
+```bash
+sudo coreos-installer install /dev/nvme0n1 -u http://192.168.22.10:8080/ocp4/rhcos -I http://192.168.22.10:8080/ocp4/bootstrap.ign --insecure --insecure-ignition
+
+sudo coreos-installer install /dev/nvme0n1 -u http://192.168.22.10:8080/ocp4/rhcos -I http://192.168.22.10:8080/ocp4/master.ign --insecure --insecure-ignition
+
+sudo coreos-installer install /dev/nvme0n1 -u http://192.168.22.10:8080/ocp4/rhcos -I http://192.168.22.10:8080/ocp4/worker.ign --insecure --insecure-ignition
+
+sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/bootstrap.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.200::192.168.22.2:255.255.255.0:ocp-bootstrap.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
+sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/master.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.201::192.168.22.2:255.255.255.0:ocp-cp-1.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
+sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/master.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.202::192.168.22.2:255.255.255.0:ocp-cp-2.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
+sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/master.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.203::192.168.22.2:255.255.255.0:ocp-cp-3.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
+
+sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/worker.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.211::192.168.22.2:255.255.255.0:ocp-w-1.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
+sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/worker.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.212::192.168.22.2:255.255.255.0:ocp-w-2.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
+
+
+
+sudo coreos-installer install /dev/sda -I http://192.168.22.10:8080/ocp4/worker.ign --insecure --insecure-ignition --append-karg="ip=10.125.0.223::10.125.0.1:255.255.255.0:worker03.ocp.yargitay.gov.tr:bond0:none nameserver=10.6.222.165 nameserver=10.6.222.130 nameserver=10.6.222.131" --append-karg=rd.neednet=1
+
+sudo coreos-installer install /dev/nvme0n1 -i  http://192.168.22.10:8080/ocp4/rhcos-4.17.0-x86_64-metal.x86_64.raw.gz -I  http://192.168.22.10:8080/ocp4/bootstrap.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.200::192.168.22.1:255.255.255.0:ocp-bootstrap.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
+
+
+sudo coreos-installer install /dev/nvme0n1 \
+  --image-url=http://192.168.22.10:8080/ocp4/rhcos-4.17.0-x86_64-metal.x86_64.raw.gz \
+  --ignition-url=http://192.168.22.10:8080/ocp4/bootstrap.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=192.168.22.200::192.168.22.1:255.255.255.0:ocp-bootstrap.lab.ocp.lan:ens160:none nameserver=192.168.22.10" \
+  --append-karg=rd.neednet=1
+
+
+sudo coreos-installer install /dev/nvme0n1 \
+  --image-url=http://192.168.22.10:8080/ocp4/rhcos-4.17.0-x86_64-metal.x86_64.raw.gz \
+  --ignition-url=http://192.168.22.10:8080/ocp4/master.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=192.168.22.201::192.168.22.1:255.255.255.0:ocp-cp-1.lab.ocp.lan:ens160:none nameserver=192.168.22.10" \
+  --append-karg=rd.neednet=1
+  
+
+sudo coreos-installer install /dev/nvme0n1 \
+  --image-url=http://192.168.22.10:8080/ocp4/rhcos-4.17.0-x86_64-metal.x86_64.raw.gz \
+  --ignition-url=http://192.168.22.10:8080/ocp4/master.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=192.168.22.202::192.168.22.1:255.255.255.0:ocp-cp-2.lab.ocp.lan:ens160:none nameserver=192.168.22.10" \
+  --append-karg=rd.neednet=1
+
+
+sudo coreos-installer install /dev/nvme0n1 \
+  --image-url=http://192.168.22.10:8080/ocp4/rhcos-4.17.0-x86_64-metal.x86_64.raw.gz \
+  --ignition-url=http://192.168.22.10:8080/ocp4/master.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=192.168.22.203::192.168.22.1:255.255.255.0:ocp-cp-3.lab.ocp.lan:ens160:none nameserver=192.168.22.10" \
+  --append-karg=rd.neednet=1
+```
