@@ -26,18 +26,18 @@ oc delete pods --field-selector=status.phase==Succeeded --all-namespaces
 | Compute |
 
 
-| api.ocp.lab.local - 10.5.209.250 |
-| api-int.ocp.lab.local - 10.5.209.250 |
-| *.apps.ocp.lab.local  - 10.5.209.250 |
-| bastion.ocp.lab.local - 10.5.209.250 - 00:50:56:86:bc:64 - 00505686bc64 |
+| api.ocp.lab.local | 10.5.209.250 |
+| api-int.ocp.lab.local | 10.5.209.250 |
+| *.apps.ocp.lab.local  | 10.5.209.250 |
+| bastion.ocp.lab.local | 10.5.209.250 - 00:50:56:86:bc:64 - 00505686bc64 |
 
-| bootstrap.ocp.lab.local - 10.5.209.240 - 00:50:56:86:2a:09 - 005056862a09 |
-| master01.ocp.lab.local - 10.5.209.241 -  00:50:56:86:de:66 - 00505686de66 |
-| master02.ocp.lab.local - 10.5.209.242 - 00:50:56:86:b9:b8 - 00505686b9b8 |
-| master03.ocp.lab.local - 10.5.209.243 - 00:50:56:86:26:d4 - 0050568626d4 |
+| bootstrap.ocp.lab.local | 10.5.209.240  | 00:50:56:86:2a:09 | 005056862a09 |
+| master01.ocp.lab.local  | 10.5.209.241  | 00:50:56:86:de:66 | 00505686de66 |
+| master02.ocp.lab.local  | 10.5.209.242  | 00:50:56:86:b9:b8 | 00505686b9b8 |
+| master03.ocp.lab.local  | 10.5.209.243  | 00:50:56:86:26:d4 | 0050568626d4 |
 
-| worker01.ocp.lab.local - 10.5.209.251 - 00:50:56:86:f5:32 - 00505686f532 |
-| worker02.ocp.lab.local - 10.5.209.252 - 00:50:56:86:39:25 - 005056863925 |
+| worker01.ocp.lab.local | 10.5.209.251 | 00:50:56:86:f5:32 | 00505686f532 |
+| worker02.ocp.lab.local | 10.5.209.252 | 00:50:56:86:39:25 | 005056863925 |
 
-| quay.ocp.lab.local - 10.5.209.245 - 00:50:56:86:eb:52 - 00505686eb52 |
-| gitlab.ocp.lab.local - 10.5.209.246 - 00:50:56:86:7b:ef - 005056867bef |
+| quay.ocp.lab.local | 10.5.209.245 | 00:50:56:86:eb:52 | 00505686eb52 |
+| gitlab.ocp.lab.local | 10.5.209.246 | 00:50:56:86:7b:ef | 005056867bef |
