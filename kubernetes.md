@@ -59,22 +59,22 @@ network:
 
     ```
     sudo hostnamectl set-hostname haproxy.lab.local
-    sudo hostnamectl set-hostname master1.lab.local
-    sudo hostnamectl set-hostname master2.lab.local
-    sudo hostnamectl set-hostname master3.lab.local
-    sudo hostnamectl set-hostname worker1.lab.local
-    sudo hostnamectl set-hostname worker2.lab.local
-    sudo hostnamectl set-hostname worker3.lab.local
+    sudo hostnamectl set-hostname master01.lab.local
+    sudo hostnamectl set-hostname master02.lab.local
+    sudo hostnamectl set-hostname master03.lab.local
+    sudo hostnamectl set-hostname worker01.lab.local
+    sudo hostnamectl set-hostname worker02.lab.local
+    sudo hostnamectl set-hostname worker03.lab.local
     ```
 3.  **Hostname & /etc/hosts Ayarları:** Her sunucuya anlamlı bir hostname verin ve tüm sunuculardaki `/etc/hosts` dosyasını aşağıdaki gibi güncelleyin:
     ```
     192.168.57.100 haproxy haproxy.lab.local
-    192.168.57.101 master1 master1.lab.local
-    192.168.57.102 master2 master2.lab.local
-    192.168.57.103 master3 master3.lab.local
-    192.168.57.111 worker1 worker1.lab.local
-    192.168.57.112 worker2 worker2.lab.local
-    192.168.57.113 worker3 worker3.lab.local
+    192.168.57.101 master1 master01.lab.local
+    192.168.57.102 master2 master02.lab.local
+    192.168.57.103 master3 master03.lab.local
+    192.168.57.111 worker1 worker01.lab.local
+    192.168.57.112 worker2 worker02.lab.local
+    192.168.57.113 worker3 worker03.lab.local
     ```
 4.  **Gerekli Portlar (Firewall İzinleri):**
     * **Master Düğümler:** TCP 6443, 2379-2380, 10250, 10257, 10259
