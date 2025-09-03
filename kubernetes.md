@@ -297,6 +297,30 @@ Aşağıdaki adımları **tüm 6 Kubernetes düğümünde** gerçekleştirin:
     * 192.168.57.100: Kontrol düzlemi düğümünün (veya birden fazla kontrol düzlemi düğümü varsa, bunların önündeki bir yük dengeleyicinin - load balancer) IP adresi veya DNS adıdır. Diğer düğümler bu    
     adres üzerinden API sunucusu ile konuşur.
     * 6443: Kubernetes API sunucusunun varsayılan güvenli (HTTPS) portudur.
+    * Eğer Çalışmaz ise --
+    ```bash
+    sudo kubeadm reset -f
+
+    sudo systemctl stop kubelet
+    sudo systemctl stop containerd
+    sudo rm -rf /etc/cni/net.d
+    sudo rm -rf /etc/kubernetes/
+    sudo rm -rf /var/lib/etcd
+    sudo rm -rf /var/lib/kubelet/*
+    sudo rm -rf $HOME/.kube
+
+    sudo crictl ps -a
+    sudo crictl rm --all
+    sudo crictl rmi --all
+
+    sudo systemctl start containerd
+    sudo systemctl restart kubelet
+
+    sudo kubeadm init \
+    --control-plane-endpoint "10.5.209.241:6443" \
+    --upload-certs \
+    --pod-network-cidr=10.244.0.0/16
+    ```
 
     --------------------------------------------------------------
 3.  **ÖNEMLİ:** Komut çıktısındaki `kubeadm join` komutlarını (hem master hem worker için) ve `kubectl` yapılandırma adımlarını **kaydedin**.
