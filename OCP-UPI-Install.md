@@ -345,7 +345,7 @@ sudo localectl set-keymap trq
 
 sudo nano /etc/ssh/sshd_conf.d/40-rhcos-defaults.conf
 PasswordAuthentication yes
-
+sudo passwd core
 sudo systemctl restart sshd --now
 ```
 -------------------------------------
