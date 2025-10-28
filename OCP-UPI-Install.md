@@ -516,3 +516,6 @@ sudo coreos-installer install /dev/nvme0n1 \
   --append-karg="ip=192.168.22.203::192.168.22.1:255.255.255.0:ocp-cp-3.lab.ocp.lan:ens160:none nameserver=192.168.22.10" \
   --append-karg=rd.neednet=1
 ```
+```
+./openshift-install wait-for install-complete --log-level debug
+```
