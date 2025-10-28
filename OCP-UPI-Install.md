@@ -341,6 +341,15 @@ curl localhost:8080/ocp4/
 ```
 -------------------------------------
 ```bash
+sudo localectl set-keymap trq
+
+sudo nano /etc/ssh/sshd_conf.d/40-rhcos-defaults.conf
+PasswordAuthentication yes
+
+sudo systemctl restart sshd --now
+```
+-------------------------------------
+```bash
 sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/bootstrap.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.200::192.168.22.2:255.255.255.0:ocp-bootstrap.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
 sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/master.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.201::192.168.22.2:255.255.255.0:ocp-cp-1.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
 sudo coreos-installer install /dev/nvme0n1 -I http://192.168.22.10:8080/ocp4/master.ign --insecure --insecure-ignition --append-karg="ip=192.168.22.202::192.168.22.2:255.255.255.0:ocp-cp-2.lab.ocp.lan:ens160:none nameserver=192.168.22.10" --append-karg=rd.neednet=1
