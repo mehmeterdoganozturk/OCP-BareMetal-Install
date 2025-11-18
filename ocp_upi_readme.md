@@ -412,7 +412,7 @@ sudo coreos-installer install /dev/sda \
 
 
 ## Topoloji Diyagramı
-![alt text](images/OCP_Cover.jpg)
+![alt text](images/sema2.png)
 ![OpenShift Topoloji Diyagramı](topology.png)
 
 ## 1. DNS ve HAProxy Yapılandırması
