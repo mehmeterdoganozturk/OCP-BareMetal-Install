@@ -3,6 +3,7 @@
 Bu doküman, bare-metal üzerinde **User Provisioned Infrastructure (UPI)** yöntemi ile **3 Master + 3 Worker + HAProxy + Bastion** mimarisinde OpenShift 4 kurulumu için hazırlanmıştır.
 
 ## Topoloji Diyagramı
+![OpenShift Topoloji Diyagramı](images/OCP_bak.png)
 ![OpenShift Topoloji Diyagramı](images/OCP.png)
 
 
