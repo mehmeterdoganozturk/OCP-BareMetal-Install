@@ -2,6 +2,23 @@
 
 Bu doküman, bare-metal üzerinde **User Provisioned Infrastructure (UPI)** yöntemi ile **3 Master + 3 Worker + HAProxy + Bastion** mimarisinde OpenShift 4 kurulumu için hazırlanmıştır.
 
+## Topoloji Diyagramı
+![OpenShift Topoloji Diyagramı](images/OCP.png)
+
+
+## 1. DNS ve HAProxy Yapılandırması
+_(Bu bölümde daha önce eklediğimiz DNS kayıtları ve HAProxy konfigürasyonu yer almaktadır.)_
+
+## 2. OpenShift Kurulumu İçin 7 Adımlık Yapılandırma Blokları
+1. **DNS Kayıtları**
+2. **HAProxy Load Balancer Ayarları**
+3. **İnstall-config.yaml Oluşturma**
+4. **RHCOS Boot ve Ignition Dosyaları**
+5. **Bootstrap ve Kontrol Düzlemi Kurulumu**
+6. **Worker Node Kurulumu**
+7. **Kurulum Sonrası Doğrulama**
+
+
 ## DNS Kayıtları
 ```
 10.125.0.250    bastion.ocplab.yargitay.gov.tr
@@ -270,6 +287,50 @@ sudo systemctl restart sshd --now
 ```
 
 ---
+## CoreOS Installer Komutları (Bootstrap, Master, Worker)
+```
+sudo coreos-installer install /dev/sda \
+  --ignition-url=http://10.125.0.250:8080/ocp4/bootstrap.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=10.125.0.240::10.125.0.1:255.255.255.0:bootstrap.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg=rd.neednet=1
+
+sudo coreos-installer install /dev/sda \
+  --ignition-url=http://10.125.0.250:8080/ocp4/master.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=10.125.0.241::10.125.0.1:255.255.255.0:master01.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg=rd.neednet=1
+
+sudo coreos-installer install /dev/sda \
+  --ignition-url=http://10.125.0.250:8080/ocp4/master.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=10.125.0.242::10.125.0.1:255.255.255.0:master02.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg=rd.neednet=1
+
+sudo coreos-installer install /dev/sda \
+  --ignition-url=http://10.125.0.250:8080/ocp4/master.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=10.125.0.243::10.125.0.1:255.255.255.0:master03.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg=rd.neednet=1
+
+sudo coreos-installer install /dev/sda \
+  --ignition-url=http://10.125.0.250:8080/ocp4/worker.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=10.125.0.251::10.125.0.1:255.255.255.0:worker01.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg=rd.neednet=1
+
+sudo coreos-installer install /dev/sda \
+  --ignition-url=http://10.125.0.250:8080/ocp4/worker.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=10.125.0.252::10.125.0.1:255.255.255.0:worker02.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg=rd.neednet=1
+
+sudo coreos-installer install /dev/sda \
+  --ignition-url=http://10.125.0.250:8080/ocp4/worker.ign \
+  --insecure --insecure-ignition \
+  --append-karg="ip=10.125.0.253::10.125.0.1:255.255.255.0:worker03.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg=rd.neednet=1
+```
 
 ## 8. Bootstrap Süreci
 Bootstrap node’u başlattıktan sonra bastion üzerinden şu komutu çalıştırın:
@@ -351,7 +412,7 @@ sudo vi /etc/hosts
 ```
 Aşağıdaki satırı ekleyin:
 ```
-192.168.0.96 ocp-svc api.lab.ocp.lan console-openshift-console.apps.lab.ocp.lan oauth-openshift.apps.lab.ocp.lan downloads-openshift-console.apps.lab.ocp.lan alertmanager-main-openshift-monitoring.apps.lab.ocp.lan grafana-openshift-monitoring.apps.lab.ocp.lan prometheus-k8s-openshift-monitoring.apps.lab.ocp.lan thanos-querier-openshift-monitoring.apps.lab.ocp.lan
+10.125.0.250 ocp-svc api.ocplab.yargitay.gov.tr console-openshift-console.apps.ocplab.yargitay.gov.tr oauth-openshift.apps.ocplab.yargitay.gov.tr downloads-openshift-console.apps.ocplab.yargitay.gov.tr alertmanager-main-openshift-monitoring.apps.ocplab.yargitay.gov.tr grafana-openshift-monitoring.apps.ocplab.yargitay.gov.tr prometheus-k8s-openshift-monitoring.apps.ocplab.yargitay.gov.tr thanos-querier-openshift-monitoring.apps.ocplab.yargitay.gov.tr
 ```
 
 ---
@@ -361,79 +422,7 @@ Artık cluster tamamen çalışır durumdadır. Gerektiğinde log, CSR ve node d
 
 ---
 
-
 ---
-
-
-## CoreOS Installer Komutları (Bootstrap, Master, Worker)
-```
-sudo coreos-installer install /dev/sda \
-  --ignition-url=http://10.125.0.250:8080/ocp4/bootstrap.ign \
-  --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.240::10.125.0.1:255.255.255.0:bootstrap.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
-  --append-karg=rd.neednet=1
-
-sudo coreos-installer install /dev/sda \
-  --ignition-url=http://10.125.0.250:8080/ocp4/master.ign \
-  --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.241::10.125.0.1:255.255.255.0:master01.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
-  --append-karg=rd.neednet=1
-
-sudo coreos-installer install /dev/sda \
-  --ignition-url=http://10.125.0.250:8080/ocp4/master.ign \
-  --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.242::10.125.0.1:255.255.255.0:master02.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
-  --append-karg=rd.neednet=1
-
-sudo coreos-installer install /dev/sda \
-  --ignition-url=http://10.125.0.250:8080/ocp4/master.ign \
-  --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.243::10.125.0.1:255.255.255.0:master03.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
-  --append-karg=rd.neednet=1
-
-sudo coreos-installer install /dev/sda \
-  --ignition-url=http://10.125.0.250:8080/ocp4/worker.ign \
-  --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.251::10.125.0.1:255.255.255.0:worker01.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
-  --append-karg=rd.neednet=1
-
-sudo coreos-installer install /dev/sda \
-  --ignition-url=http://10.125.0.250:8080/ocp4/worker.ign \
-  --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.252::10.125.0.1:255.255.255.0:worker02.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
-  --append-karg=rd.neednet=1
-
-sudo coreos-installer install /dev/sda \
-  --ignition-url=http://10.125.0.250:8080/ocp4/worker.ign \
-  --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.253::10.125.0.1:255.255.255.0:worker03.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
-  --append-karg=rd.neednet=1
-```
-
-
-## Topoloji Diyagramı
-![OpenShift Topoloji Diyagramı](images/OCP.png)
-
-
-## 1. DNS ve HAProxy Yapılandırması
-_(Bu bölümde daha önce eklediğimiz DNS kayıtları ve HAProxy konfigürasyonu yer almaktadır.)_
-
-## 2. OpenShift Kurulumu İçin 7 Adımlık Yapılandırma Blokları
-1. **DNS Kayıtları**
-2. **HAProxy Load Balancer Ayarları**
-3. **İnstall-config.yaml Oluşturma**
-4. **RHCOS Boot ve Ignition Dosyaları**
-5. **Bootstrap ve Kontrol Düzlemi Kurulumu**
-6. **Worker Node Kurulumu**
-7. **Kurulum Sonrası Doğrulama**
-
-## 3. RHCOS Sonrası CoreOS Installer Komutları
-```bash
-sudo coreos-installer install /dev/sda \
-  --ignition-url=http://bastion.example.local/bootstrap.ign \
-  --insecure-ignition
-```
-_(Master ve Worker için ignition URL’leri değişecek.)_
 
 ## 4. Bootstrap Removal Sonrası Cluster Health
 ```bash
@@ -444,10 +433,4 @@ oc get pods -A
 ```
 Bootstrap kaldırıldıktan sonra tüm control-plane bileşenlerinin `AVAILABLE=True` olması gerekir.
 
-## 5. Ek Önerilen (Yeşil Tikli) Bölümler
-### ✔ IP Adres Planı
-### ✔ Bastion Üzerindeki Servisler
-### ✔ Kurulum Akış Diyagramı
-### ✔ HAProxy Troubleshooting
-### ✔ Cluster Validation Komutları
 
