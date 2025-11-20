@@ -6,7 +6,7 @@ Bu doküman, bare-metal üzerinde **User Provisioned Infrastructure (UPI)** yön
 
 ![OpenShift Topoloji Diyagramı](images/OCP.png)
 
-
+## Gereksinimler Duruma Göre
 
 | Adet (Şemadaki Adet) | Önerilen İşlemci (CPU)           | Önerilen Hafıza (RAM) | Önerilen Disk Alanı        | Önemli Notlar                                                                                                                        |
 | -------------------- | -------------------------------- | --------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
