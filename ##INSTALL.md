@@ -434,4 +434,25 @@ oc get pods -A
 ```
 Bootstrap kaldırıldıktan sonra tüm control-plane bileşenlerinin `AVAILABLE=True` olması gerekir.
 
+| Adet (Şemadaki Adet) | Önerilen İşlemci (CPU)           | Önerilen Hafıza (RAM) | Önerilen Disk Alanı        | Önemli Notlar                                                                                                                        |
+| -------------------- | -------------------------------- | --------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| 3                    | 8 VCPUs (veya fiziksel çekirdek) | 32 GB RAM             | 250 GB SSD (NVMe önerilir) | Etcd için düşük gecikme süresi (low latency) hayati. Bu sunucular kararlılık ve yönetim yükü için güçlü olmalıdır.                   |
+| 3                    | 8-16 VCPUs                       | 64 GB RAM             | 500 GB SSD                 | Uygulamalarınızın yoğunluğuna bağlı olarak RAM ve CPU en çok burada artırılmalıdır. Uygulama verisi için harici depolama kullanılır. |
+| 1                    | 4 VCPUs                          | 16 GB RAM             | 120 GB SSD                 | Kurulum tamamlandıktan sonra kapatılacak geçici sunucudur.                                                                           |
+| 1                    | 4 VCPUs                          | 8 GB RAM              | 100 GB                     | Tüm dış trafiği yönettiği için kararlı ve yeterli kaynaklara sahip olmalıdır.                                                        |
+
+| IOPS Beklentisi | vCPU         | RAM    | Disk (OS & Ephemeral) | Kullanım Amacı ve Gerekçe                                                                                                                                              |
+| --------------- | ------------ | ------ | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 5000+           | 16 vCPU      | 64 GB  | 250 GB (NVMe)         | Cluster büyüdükçe (Pod/Service sayısı arttıkça) API Server ve etcd bellek tüketimi artar. 64GB RAM, güncelleme (upgrade) süreçlerinin sorunsuz geçmesi için idealdir.  |
+| 2000+           | 16 - 32 vCPU | 128 GB | 500 GB+ (SSD)         | Java/Spring Boot gibi bellek seven uygulamalar, veritabanları veya OpenShift Data Foundation (ODF) gibi depolama çözümleri için bu bellek miktarı "rahat" bir alandır. |
+| Standart        | 8 vCPU       | 16 GB  | 200 GB                | Eğer SSL sonlandırma (Termination) Bastion üzerinde yapılacaksa CPU kritik hale gelir. Yüksek trafikli ingress akışını darboğaz olmadan işlemek için gereklidir.       |
+| Standart        | 4 vCPU       | 16 GB  | 100 GB                | Kurulum süresini kısaltmak dışında bir etkisi yoktur. Kurulumdan sonra silineceği için bu değerler yeterlidir.                                                         |
+
+
+| Gateway API                                                                                                                  | Geleneksel Ingress                                                                     |
+| ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Ağ yöneticisi, uygulama geliştiricisi ve küme operatörü rollerini ayrı nesnelerle (GatewayClass, Gateway, HTTPRoute) ayırır. | Tek bir Ingress nesnesi tüm sorumlulukları taşır.                                      |
+| HTTP/S yanında TCP, UDP ve diğer protokoller için yerel destek sağlar.                                                       | Çoğunlukla sadece HTTP/S trafiği için kullanılır.                                      |
+| Yönlendirme kurallarına özel eklentiler (Filters) eklemeye izin veren standart bir arayüz sunar.                             | Sağlayıcıya özel (vendor-specific) ek açıklamalar (annotations) kullanmayı gerektirir. |
+
 
