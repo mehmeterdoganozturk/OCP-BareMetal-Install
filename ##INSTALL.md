@@ -418,8 +418,8 @@ watch -n5 oc get nodes
 # htpasswd aracı gereklidir (genelde httpd-tools paketindedir)
 # Komut yapısı: htpasswd -n -B -b <kullanici_adi> <sifre> | base64 -w0
 htpasswd -n -B -b erdogan Erdogan.2024! | base64 -w0
+nano oauth-htpasswd.yaml
 
-```bash
 apiVersion: v1
 kind: Secret
 metadata:
@@ -444,7 +444,7 @@ spec:
       htpasswd:
         fileData:
           name: htpasswd-secret
-```
+
 oc apply -f oauth-htpasswd.yaml
 oc adm policy add-cluster-role-to-user cluster-admin erdogan
 
