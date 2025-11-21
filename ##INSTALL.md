@@ -415,8 +415,42 @@ watch -n5 oc get nodes
 
 ## 12. Kullanıcı Oluşturma
 ```bash
+# htpasswd aracı gereklidir (genelde httpd-tools paketindedir)
+# Komut yapısı: htpasswd -n -B -b <kullanici_adi> <sifre> | base64 -w0
+htpasswd -n -B -b erdogan Erdogan.2024! | base64 -w0
+
+```bash
+apiVersion: v1
+kind: Secret
+metadata:
+  name: htpasswd-secret
+  namespace: openshift-config
+type: Opaque
+data:
+  # Buradaki değer 'erdogan' kullanıcısı ve 'Erdogan.2024!' şifresinin base64 halidir.
+  # Kendi ürettiğiniz farklı bir şifre varsa Adım 1'deki çıktı ile burayı değiştirin.
+  htpasswd: ZXJkb2dhbjokMmkkMDUkLm5GSEI4a2pGZjlqL05xTzRCLk51Lm51c2p2ZzZ1LjhnL0VqLmI0OEEvQnB2R1U4Z1h5N3E=
+---
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+    # Giriş ekranında görünecek isim burada belirlenir.
+    - name: Local_User
+      mappingMethod: claim
+      type: HTPasswd
+      htpasswd:
+        fileData:
+          name: htpasswd-secret
+```
+oc apply -f oauth-htpasswd.yaml
+oc adm policy add-cluster-role-to-user cluster-admin erdogan
+
 htpasswd -n -B -b <username> <password>
 oc apply -f ~/ocp4-metal-install/manifest/oauth-htpasswd.yaml
+
 ```
 
 Admin yetkisi verme:
