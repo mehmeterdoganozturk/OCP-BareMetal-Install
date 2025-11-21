@@ -50,15 +50,15 @@ _(Bu bölümde daha önce eklediğimiz DNS kayıtları ve HAProxy konfigürasyon
 10.125.0.254    api-int.ocplab.yargitay.gov.tr
 10.125.0.254    *.apps.ocplab.yargitay.gov.tr
 
-10.125.0.240    bootstrap.ocplab.yargitay.gov.tr
+10.125.0.200    bootstrap.ocplab.yargitay.gov.tr
 
-10.125.0.241    master01.ocplab.yargitay.gov.tr
-10.125.0.242    master02.ocplab.yargitay.gov.tr
-10.125.0.243    master03.ocplab.yargitay.gov.tr
+10.125.0.201    master01.ocplab.yargitay.gov.tr
+10.125.0.202    master02.ocplab.yargitay.gov.tr
+10.125.0.203    master03.ocplab.yargitay.gov.tr
 
-10.125.0.251    worker01.ocplab.yargitay.gov.tr
-10.125.0.252    worker02.ocplab.yargitay.gov.tr
-10.125.0.253    worker03.ocplab.yargitay.gov.tr
+10.125.0.211    worker01.ocplab.yargitay.gov.tr
+10.125.0.212    worker02.ocplab.yargitay.gov.tr
+10.125.0.213    worker03.ocplab.yargitay.gov.tr
 ```
 
 ---
@@ -316,43 +316,43 @@ sudo systemctl restart sshd --now
 sudo coreos-installer install /dev/sda \
   --ignition-url=http://10.125.0.254:8080/ocp4/bootstrap.ign \
   --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.240::10.125.0.1:255.255.255.0:bootstrap.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg="ip=10.125.0.200::10.125.0.1:255.255.255.0:bootstrap.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
   --append-karg=rd.neednet=1
 
 sudo coreos-installer install /dev/sda \
   --ignition-url=http://10.125.0.254:8080/ocp4/master.ign \
   --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.241::10.125.0.1:255.255.255.0:master01.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg="ip=10.125.0.201::10.125.0.1:255.255.255.0:master01.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
   --append-karg=rd.neednet=1
 
 sudo coreos-installer install /dev/sda \
   --ignition-url=http://10.125.0.254:8080/ocp4/master.ign \
   --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.242::10.125.0.1:255.255.255.0:master02.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg="ip=10.125.0.202::10.125.0.1:255.255.255.0:master02.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
   --append-karg=rd.neednet=1
 
 sudo coreos-installer install /dev/sda \
   --ignition-url=http://10.125.0.254:8080/ocp4/master.ign \
   --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.243::10.125.0.1:255.255.255.0:master03.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg="ip=10.125.0.203::10.125.0.1:255.255.255.0:master03.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
   --append-karg=rd.neednet=1
 
 sudo coreos-installer install /dev/sda \
   --ignition-url=http://10.125.0.254:8080/ocp4/worker.ign \
   --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.251::10.125.0.1:255.255.255.0:worker01.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg="ip=10.125.0.211::10.125.0.1:255.255.255.0:worker01.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
   --append-karg=rd.neednet=1
 
 sudo coreos-installer install /dev/sda \
   --ignition-url=http://10.125.0.254:8080/ocp4/worker.ign \
   --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.252::10.125.0.1:255.255.255.0:worker02.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg="ip=10.125.0.212::10.125.0.1:255.255.255.0:worker02.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
   --append-karg=rd.neednet=1
 
 sudo coreos-installer install /dev/sda \
   --ignition-url=http://10.125.0.254:8080/ocp4/worker.ign \
   --insecure --insecure-ignition \
-  --append-karg="ip=10.125.0.253::10.125.0.1:255.255.255.0:worker03.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
+  --append-karg="ip=10.125.0.213::10.125.0.1:255.255.255.0:worker03.ocplab.yargitay.gov.tr:ens33:none nameserver=10.6.222.130" \
   --append-karg=rd.neednet=1
 ```
 
