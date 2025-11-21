@@ -403,6 +403,7 @@ oc get csr
 ### Tüm pending CSRs onaylama
 ```bash
 oc get csr -o go-template='{{range .items}}{{if not .status}}{{.metadata.name}}{{"\n"}}{{end}}{{end}}' | xargs oc adm certificate approve
+oc get csr -o name | xargs oc adm certificate approve
 ```
 
 ### Node'ların Ready olmasını izleyin
