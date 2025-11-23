@@ -510,14 +510,14 @@ spec:
 ```
 Bu, OpenShift’in control plane node’ları üzerinde workload (pod) schedule edilmesini engelleyen ana parametredir.
 
-##Bu alan:
+## Bu alan:
 #false olduğunda:
 
 1.Master node’ları üzerinde hiçbir workload pod schedule edilmez.
 2.Sadece OpenShift’in kendi control plane component’leri çalışır.
 3.Normal operasyonda önerilen değerdir.
 
-##true olduğunda:
+## true olduğunda:
 
 1.Master node’ları aynı zamanda worker gibi davranabilir.
 2.Pod’lar master’a schedule olabilir.
