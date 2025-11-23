@@ -480,9 +480,9 @@ Aşağıdaki satırı ekleyin:
 ```
 10.125.0.254 ocp-svc api.ocplab.yargitay.gov.tr console-openshift-console.apps.ocplab.yargitay.gov.tr oauth-openshift.apps.ocplab.yargitay.gov.tr downloads-openshift-console.apps.ocplab.yargitay.gov.tr alertmanager-main-openshift-monitoring.apps.ocplab.yargitay.gov.tr grafana-openshift-monitoring.apps.ocplab.yargitay.gov.tr prometheus-k8s-openshift-monitoring.apps.ocplab.yargitay.gov.tr thanos-querier-openshift-monitoring.apps.ocplab.yargitay.gov.tr
 ```
-
+```
 watch -n5 oc get nodes
-
+```
 ---
 
 ## Kurulum Tamamlandı
