@@ -501,3 +501,30 @@ oc get pods -A
 ```
 Bootstrap kaldırıldıktan sonra tüm control-plane bileşenlerinin `AVAILABLE=True` olması gerekir.
 
+```
+oc edit schedulers.config.openshift.io cluster
+```
+```
+spec:
+  mastersSchedulable: false
+```
+Bu, OpenShift’in control plane node’ları üzerinde workload (pod) schedule edilmesini engelleyen ana parametredir.
+
+Bu alan:
+false olduğunda:
+
+Master node’ları üzerinde hiçbir workload pod schedule edilmez.
+
+Sadece OpenShift’in kendi control plane component’leri çalışır.
+
+Normal operasyonda önerilen değerdir.
+
+true olduğunda:
+
+Master node’ları aynı zamanda worker gibi davranabilir.
+
+Pod’lar master’a schedule olabilir.
+
+Küçük cluster (3 node) veya test ortamı için tercih edilir.
+
+Üretimde tavsiye edilmez (yük artınca API ve etcd performansı düşer).
