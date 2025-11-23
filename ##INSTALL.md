@@ -226,6 +226,13 @@ ssh-keygen
 
 ---
 
+## Extract Installer and Client
+```bash
+tar -xvf openshift-install-linux.tar.gz
+openshift-client-linux.tar.gz
+mv oc kubectl /usr/bin
+```
+
 ## 4. Kurulum Dizini Oluşturma
 ```bash
 mkdir ~/ocp-install
