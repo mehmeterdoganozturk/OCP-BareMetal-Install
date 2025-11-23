@@ -513,13 +513,13 @@ Bu, OpenShift’in control plane node’ları üzerinde workload (pod) schedule 
 ## Bu alan:
 ## false olduğunda:
 
-1.Master node’ları üzerinde hiçbir workload pod schedule edilmez.
-2.Sadece OpenShift’in kendi control plane component’leri çalışır.
-3.Normal operasyonda önerilen değerdir.
+1. **Master node’ları üzerinde hiçbir workload pod schedule edilmez.**
+2. **Sadece OpenShift’in kendi control plane component’leri çalışır.**
+3. **Normal operasyonda önerilen değerdir.**
 
 ## true olduğunda:
 
-1.Master node’ları aynı zamanda worker gibi davranabilir.
-2.Pod’lar master’a schedule olabilir.
-3.Küçük cluster (3 node) veya test ortamı için tercih edilir.
-4.Üretimde tavsiye edilmez (yük artınca API ve etcd performansı düşer).
+1. **Master node’ları aynı zamanda worker gibi davranabilir.**
+2. **Pod’lar master’a schedule olabilir.**
+3. **Küçük cluster (3 node) veya test ortamı için tercih edilir.**
+4. **Üretimde tavsiye edilmez (yük artınca API ve etcd performansı düşer).**
