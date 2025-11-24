@@ -104,7 +104,7 @@ oc get pvc -n openshift-pipelines
 Aşağıdaki diyagram, OpenShift Pipelines Tekton Results PostgreSQL bileşeni ile NFS tabanlı persistent storage arasındaki akışı göstermektedir.
 
 ![Tekton NFS Diagram](/mnt/data/A_flowchart-style_digital_diagram_illustrates_the_.png)
-![OpenShift Topoloji Diyagramı](images/OCP.png)
+![OpenShift Topoloji Diyagramı](images/PVC.png)
 ---
 
 ## Özet
