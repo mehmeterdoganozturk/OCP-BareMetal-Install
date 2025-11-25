@@ -98,4 +98,34 @@ podman logs -f quay
 
 ---
 
+### 1. Anonim Erişimi Açın (Kritik Adım)
+
+Config dosyasındaki o kısıtlamayı kaldıralım.
+
+# Anonim erişimi false'dan true'ya çekiyoruz
+```bash
+sed -i 's/FEATURE_ANONYMOUS_ACCESS: false/FEATURE_ANONYMOUS_ACCESS: true/g' /var/lib/quay/config/config.yaml
+grep "FEATURE_ANONYMOUS_ACCESS" /var/lib/quay/config/config.yaml  
+# Çıktı: FEATURE_ANONYMOUS_ACCESS: true olmalı
+```
+podman restart quay
+```bash
+podman exec -it postgresql psql -U quayuser -d quay -c "UPDATE \"user\" SET verified = true WHERE username = 'quayadmin';"
+```
+### (Opsiyonel) Adım 3: Mail Doğrulamayı Tamamen Kapatma
+
+Eğer ileride başka kullanıcılar da açacaksanız ve her seferinde veritabanıyla uğraşmak istemiyorsanız, mail doğrulama zorunluluğunu konfigürasyondan tamamen kapatabilirsiniz.
+
+Bunun için `config.yaml` dosyasında şu ayarları yapıp Quay'i yeniden başlatmanız yeterlidir:
+
+1.  Dosyayı düzenlemek için açın (veya `sed` kullanın):
+
+# Mail özelliğini ve doğrulama zorunluluğunu kapatır  
+```bash
+echo "FEATURE_MAILING: false" >> /var/lib/quay/config/config.yaml  
+echo "FEATURE_USERNAME_CONFIRMATION: false" >> /var/lib/quay/config/config.yaml
+```
+podman restart quay
+
 Bu döküman, Quay Registry’nin temel kurulum adımlarını içerir.
+
