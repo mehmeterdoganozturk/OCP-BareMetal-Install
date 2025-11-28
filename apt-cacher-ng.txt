@@ -1,0 +1,221 @@
+apt-cacher-ng Repo Server Kurulumu
+
+sudo apt update
+sudo apt install apt-cacher-ng
+
+sudo systemctl enable apt-cacher-ng
+sudo systemctl status apt-cacher-ng
+
+Tarayıcıdan Kontrol:
+http://<repo-sunucusu-ip>:3142/acng-report.html
+
+Config ayar kontrol
+
+sudo nano /etc/apt-cacher-ng/acng.conf
+
+Port:3142
+
+CacheDir: /var/cache/apt-cacher-ng
+
+LogDir: /var/log/apt-cacher-ng
+
+BindAddress: 0.0.0.0 //yada sadece erişecek adres subnet i
+
+sudo systemctl restart apt-cacher-ng
+
+
+****İstemci Sunucuların Ayarı****
+Proxy Ayarı
+
+Her istemciye /etc/apt/apt.conf.d/01proxy dosyası ekle:
+
+Acquire::http { Proxy "http://<repo-sunucusu-ip>:3142"; };
+Acquire::https { Proxy "http://<repo-sunucusu-ip>:3142"; };
+
+Test için:
+sudo apt update
+
+Sunucu Tarafı Firewall ayarları
+
+sudo ufw allow from 192.168.0.0/24 to any port 3142
+
+Cache Yönetimi:
+sudo apt-cacher-ng -c /etc/apt-cacher-ng -C
+
+Cache Boyutu:
+du -sh /var/cache/apt-cacher-ng
+
+# Pod içinde
+apt-cacher-ng -c /etc/apt-cacher-ng -s
+# veya cache dizinini temizle
+rm -rf /var/cache/apt-cacher-ng/*
+systemctl restart apt-cacher-ng
+
+
+
+YAML
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apt-cacher-ng
+  namespace: yargitay-linux
+  labels:
+    app: apt-cacher-ng
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apt-cacher-ng
+  template:
+    metadata:
+      labels:
+        app: apt-cacher-ng
+    spec:
+      serviceAccountName: yargitay-repo-sa
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      containers:
+        - name: apt-cacher-ng
+          image: quay.yargitay.gov.tr:8443/yargitay-linux-organization/yargitay-linux-project:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3142
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsUser: 0
+            runAsGroup: 0
+            privileged: false
+            readOnlyRootFilesystem: false
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              if [ ! -f /etc/apt-cacher-ng/acng.conf ]; then
+                cp /etc/apt-cacher-ng/acng.conf.default /etc/apt-cacher-ng/acng.conf;
+                echo 'ForeGround=1' >> /etc/apt-cacher-ng/acng.conf;
+              fi;
+              exec /usr/sbin/apt-cacher-ng -c /etc/apt-cacher-ng
+          volumeMounts:
+            - name: config
+              mountPath: /etc/apt-cacher-ng
+            - name: cache
+              mountPath: /var/cache/apt-cacher-ng
+            - name: logs
+              mountPath: /var/log/apt-cacher-ng
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: apt-cacher-ng-config-pvc
+        - name: cache
+          persistentVolumeClaim:
+            claimName: apt-cacher-ng-cache-pvc
+        - name: logs
+          persistentVolumeClaim:
+            claimName: apt-cacher-ng-logs-pvc
+
+
+Service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: apt-cacher-ng
+  namespace: yargitay-linux
+spec:
+  type: NodePort
+  selector:
+    app: apt-cacher-ng
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3142       # Cluster içi port
+      targetPort: 3142 # Pod portu
+      nodePort: 30142  # Node üzerinden erişilecek port
+
+PVC.yaml
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: apt-cacher-ng-config-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 10.125.0.50
+    path: /mnt/repo-apt-cacher-ng/config
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: apt-cacher-ng-cache-pv
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 10.125.0.50
+    path: /mnt/repo-apt-cacher-ng/cache
+  persistentVolumeReclaimPolicy: Retain
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: apt-cacher-ng-logs-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  nfs:
+    server: 10.125.0.50
+    path: /mnt/repo-apt-cacher-ng/logs
+  persistentVolumeReclaimPolicy: Retain
+
+PVC_Claim.yaml
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: apt-cacher-ng-config-pvc
+  namespace: yargitay-linux
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: apt-cacher-ng-config-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: apt-cacher-ng-cache-pvc
+  namespace: yargitay-linux
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  volumeName: apt-cacher-ng-cache-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: apt-cacher-ng-logs-pvc
+  namespace: yargitay-linux
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: apt-cacher-ng-logs-pv
+
