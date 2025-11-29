@@ -40,6 +40,8 @@ Aşağıdaki dosyalar sizin dizininizde mevcut olarak listelenmiştir:
 Aşağıdaki komut, RSA 2048-bit anahtar çifti ve CSR oluşturur. `-nodes` private key'i şifrelemez; eğer private key şifreli olsun isterseniz `-nodes` kaldırın.
 
 ```bash
+openssl req -new -newkey rsa:2048 -nodes -keyout yargitay.key -out yargitay.csr
+-------------
 openssl req -new -newkey rsa:2048 -nodes \
   -keyout yargitay2048.key \
   -out yargitay2048.csr \
