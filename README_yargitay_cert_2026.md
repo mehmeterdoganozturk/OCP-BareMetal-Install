@@ -43,7 +43,7 @@ Aşağıdaki komut, RSA 2048-bit anahtar çifti ve CSR oluşturur. `-nodes` priv
 openssl req -new -newkey rsa:2048 -nodes \
   -keyout yargitay2048.key \
   -out yargitay2048.csr \
-  -addext "subjectAltName=DNS:.yargitay.gov.tr,DNS:.yargitaycb.gov.tr,DNS:www.gpo.gov.tr"
+  -addext "subjectAltName=DNS:*.yargitay.gov.tr,DNS:*.yargitaycb.gov.tr,DNS:www.gpo.gov.tr"
 ```
 
 Komut açıklaması:
