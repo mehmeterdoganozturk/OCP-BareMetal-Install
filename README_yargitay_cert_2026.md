@@ -256,3 +256,7 @@ openssl x509 -in yargitay2026.crt -out yargitay2026.pem
 ## Yardım / İleri adımlar
 - Özel bir openssl konfig dosyasıyla CSR oluşturma örneği isterseniz, `req.cnf` örneğini sağlayıp tamamen dolduracağım.
 - PFX içinden private key'i kaldırıp sadece sertifikayı tutmak isterseniz, ilave komutlar ekleyebilirim.
+
+```bash
+openssl s_client -connect intranet.yargitay.gov.tr:443 -showcerts
+```
