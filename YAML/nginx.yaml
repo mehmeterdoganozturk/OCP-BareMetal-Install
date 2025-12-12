@@ -1,0 +1,126 @@
+nano nginx.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: web
+spec:
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+    targetPort: 80
+    #nodePort: 30080  # SABİT PORT
+  type: NodePort
+
+--------------------------
+
+kubectl get svc -n web
+
+NAME            TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE
+nginx-service   NodePort   10.108.205.199   <none>        80:31241/TCP   83s
+
+haproxy config
+
+frontend kubernetes-all
+    bind *:80
+    mode tcp
+    default_backend kubernetes-workers
+
+backend kubernetes-workers
+    mode tcp
+    balance roundrobin
+    option tcp-check
+    default-server inter 3s fall 3 rise 2
+    server worker01 10.5.209.251:31241 check
+    server worker02 10.5.209.252:31241 check
+    server worker03 10.5.209.253:31241 check
+
+
+
+--------------
+nginx.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-html
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: nginx-html
+        configMap:
+          name: nginx-html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: web
+spec:
+  selector:
+    app: nginx
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30080  # SABİT PORT
+  type: NodePort
+
+------------------
+
+kubectl create configmap nginx-html \
+  --from-file=index.html \
+  --from-file=k8s.png \
+  -n web
+
+------------------------
+
+
+
+kubectl delete configmap nginx-html -n web
+
+kubectl create configmap nginx-html \
+  --from-file=index.html \
+  --from-file=keyboard.jpg \
+  -n web
+
+kubectl rollout restart deployment nginx-deployment -n web
