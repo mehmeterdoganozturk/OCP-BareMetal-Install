@@ -1,0 +1,110 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n8n
+  namespace: n8n-prod
+  labels:
+    app: n8n
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n8n
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: n8n
+    spec:
+      serviceAccountName: n8n-sa # n8n-sa varsa onu yazabilirsin
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0 # n8n kullanıcısı için izin sorunu olursa     
+      containers:
+        - name: n8n
+          image: n8nio/n8n:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5678
+              protocol: TCP
+          env:
+            - name: DB_TYPE
+              value: postgresdb
+            - name: DB_POSTGRESDB_HOST
+              value: postgres
+            - name: DB_POSTGRESDB_PORT
+              value: "5432"
+            - name: DB_POSTGRESDB_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-postgres-secret
+                  key: POSTGRES_DB
+            - name: DB_POSTGRESDB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-postgres-secret
+                  key: POSTGRES_USER
+            - name: DB_POSTGRESDB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: n8n-postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: N8N_HOST
+              value: n8n-ocplab.yargitay.gov.tr
+            - name: N8N_PROTOCOL
+              value: https
+            - name: WEBHOOK_URL
+              value: https://n8n-ocplab.yargitay.gov.tr
+          volumeMounts:
+            - name: n8n-data
+              mountPath: /home/node/.n8n
+      volumes:
+        - name: n8n-data
+          persistentVolumeClaim:
+            claimName: n8n-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: n8n
+  namespace: n8n-prod
+spec:
+  selector:
+    app: n8n
+  ports:
+    - port: 443
+      targetPort: 5678
+      protocol: TCP
+  type: ClusterIP
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: n8n
+  namespace: n8n-prod
+spec:
+  host: n8n-ocplab.yargitay.gov.tr
+  to:
+    kind: Service
+    name: n8n
+    weight: 100
+  port:
+    targetPort: 5678
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+    certificate: |
+      -----BEGIN CERTIFICATE-----
+      MIIGlzCCBP+gAwIBAgIQOQvbxYxXpvFlvLnrm7nr3TANBgkqhkiG9w0BAQsFADBg
+      ... (Sertifika kısmını buraya yapıştırın) ...
+      7NiWH2yZFim+EvU=
+      -----END CERTIFICATE-----
+    key: |
+      -----BEGIN PRIVATE KEY-----
+      ... (BURAYA PRIVATE KEY'İNİZİ TEKRAR YAPIŞTIRIN) ...
+      -----END PRIVATE KEY-----
