@@ -91,7 +91,9 @@ sudo tcpdump port 123 -i wlp3s0
 ---
 
 > 📝 Bu döküman bir NTP sunucusu (Chrony) kurulumunu içermektedir. Hem sunucu hem istemci tarafı yapılandırmalarını kapsar.
-
+----------------------------
+sudo ipa-client-install --uninstall -U
+sudo apt remove freeipa-client
 ---------------------------
 sudo nano /etc/netplan/50-cloud-init.yaml
 
