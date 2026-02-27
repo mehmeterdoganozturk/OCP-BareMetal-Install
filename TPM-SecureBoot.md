@@ -1,45 +1,46 @@
-# 🛡️ Lenovo P16s Fedora Güvenlik ve TPM Yapılandırma Rehberi
+# 🛡️ Lenovo P16s Fedora Güvenlik, TPM & NVIDIA Yapılandırma Rehberi (Final)
 
-Bu döküman, Lenovo P16s cihazında Secure Boot aktivasyonu ve LUKS disk şifrelemesinin TPM 2.0 ile otomatize edilmesi sürecini özetler.
+Bu döküman; Secure Boot aktivasyonu, LUKS disk şifrelemesinin TPM 2.0 ile otomatize edilmesi ve NVIDIA sürücülerinin imzalanması süreçlerini kapsar.
 
 ---
 
 ## 1. Donanım ve BIOS Yapılandırması
-Sistemin Fedora imzalarını tanıması ve güvenli önyükleme yapabilmesi için BIOS üzerinde şu adımlar uygulanmıştır:
-
+Sistemin Fedora imzalarını tanıması için BIOS üzerinde şu adımlar uygulanmıştır:
 * **Secure Boot:** `Enabled` konuma getirildi.
 * **Third-Party Destek:** `Allow Microsoft Third-Party UEFI CA` seçeneği **ON** yapıldı.
 * **Sertifika Yönetimi:** `Restore Factory Keys` yapılarak sistem "User Mode" seviyesine getirildi.
+* **Rollback Protection:** `Secure Rollback Prevention` ayarı BIOS üzerinden `Enabled` yapılarak eski sürüm açıklarına karşı koruma sağlandı.
 
-## 2. Yazılımsal Kontrol ve Doğrulama
-İşletim sistemi seviyesinde güvenliğin sağlandığı terminal üzerinden teyit edilmiştir:
+## 2. TPM 2.0 ile Otomatik Disk Kilidi Açma (LUKS)
+Şifreli ana bölümün (`/dev/nvme0n1p3`), açılışta şifre sormadan TPM çipi üzerinden otomatik çözülmesi sağlanmıştır.
 
-* **Durum Sorgulama:** `mokutil --sb-state` komutu ile Secure Boot'un işletim sistemi tarafından tanındığı doğrulandı.
-* **Görsel Teyit:** GNOME Ayarları > Gizlilik ve Güvenlik ekranında "Secure Boot is Active" ve "Linux Kernel Verification" ibarelerinin **Yeşil** olduğu görüldü.
-
-## 3. TPM 2.0 ile Otomatik Disk Kilidi Açma
-`lsblk` çıktısına göre `/dev/nvme0n1p3` üzerinde bulunan şifreli bölümün, her açılışta şifre sormadan TPM çipi üzerinden açılması sağlanmıştır.
-
-### Uygulanan Komutlar:
-1.  **TPM Kaydı (PCR 0+2+7):** ```bash
+### Uygulanan İşlemler:
+1.  **MOK Kaydı:** BIOS/TPM güvenliği için MOK anahtarı oluşturuldu.
+2.  **TPM Kaydı (PCR 0+2+7):** ```bash
     sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+2+7 /dev/nvme0n1p3
     ```
-    *Bu komutla "New TPM2 token enrolled as key slot 2" onayı alınmıştır.*
+3.  **Yapılandırma:** `/etc/crypttab` dosyasına `tpm2-device=auto` parametresi eklendi.
+4.  **Initramfs Yenileme:** `sudo dracut -f --regenerate-all` ile değişiklikler kernel seviyesine işlendi.
 
-2.  **Yapılandırma Dosyası:** `/etc/crypttab` dosyasına `tpm2-device=auto` parametresi eklenerek sistemin açılışta TPM'i sorgulaması talimatı verilmiştir.
+## 3. NVIDIA Sürücü İmzalama (Secure Boot Uyumu)
+Secure Boot aktifken NVIDIA sürücülerinin çalışması için "Machine Owner Key" (MOK) süreci tamamlanmıştır:
 
-3.  **Başlangıç İmajı Yenileme:** Değişikliklerin kernel seviyesinde tanınması için dracut çalıştırılmıştır:
-    ```bash
-    sudo dracut -f --regenerate-all
-    ```
+1.  **Anahtar Oluşturma:** `sudo kmodgenca -a` ile imza anahtarları hazırlandı.
+2.  **MOK İçe Aktarma:** `sudo mokutil --import /etc/pki/akmods/certs/public_key.der` komutu ile anahtar BIOS'a gönderildi.
+3.  **Mavi Ekran (MOK Management):** Reboot sonrası "Enroll MOK" adımları tamamlanarak anahtar doğrulandı.
+4.  **Sürücü Derleme:** `sudo akmods --force` ile sürücüler yeni anahtarla imzalandı.
+
+## 4. Mevcut Güvenlik Durumu Doğrulaması
+* **`mokutil --sb-state`:** "SecureBoot enabled" olarak teyit edildi.
+* **`nvidia-smi`:** Ekran kartının aktif olduğu ve çekirdek ile iletişim kurduğu doğrulandı.
+* **`fwupdmgr security`:** HSI-3 seviyesine kadar tüm kritik güvenlik kontrolleri (TPM, IOMMU, BootGuard vb.) başarıyla geçildi.
 
 ---
 
-## ⚠️ Önemli Notlar ve Bakım
-
-* **Eski Kayıtlar:** Güvenlik ekranında alt kısımda görünen kırmızı çarpı işaretleri (2025 tarihli), sistemin geçmişindeki başarısız denemelerin log kaydıdır. Güncel durum (2026) yeşil kalkanla korunmaktadır.
-* **Kurtarma:** Eğer BIOS güncellemesi sonrası sistem şifre isterse, manuel şifreni girip sistem açıldıktan sonra `dracut` komutunu tekrar çalıştırman yeterlidir.
-* **Bluetooth Uyarısı:** `dracut` sırasında görülen Bluetooth mesajı bir hata değildir, dizüstü bilgisayarlar için standart bir bilgilendirmedir.
+## ⚠️ Bakım ve Hatırlatmalar
+* **Kernel Güncellemeleri:** `akmods` sayesinde yeni kernel güncellemelerinde sürücüler otomatik olarak imzalanmaya devam edecektir.
+* **Tainted Kernel:** Nvidia kapalı kaynaklı olduğu için sistemde "Tainted" uyarısı görülmesi normaldir, bir hata değildir.
+* **Kurtarma:** Sistem bir sebeple TPM üzerinden açılmazsa, kurulumda belirlediğiniz manuel LUKS şifrenizle her zaman giriş yapabilirsiniz.
 
 ---
 *Son Güncelleme: 27 Şubat 2026*
