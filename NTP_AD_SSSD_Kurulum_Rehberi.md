@@ -93,8 +93,8 @@ sudo apt install realmd sssd sssd-tools libnss-sss libpam-sss adcli samba-common
 ## Domain Join
 
 ``` bash
-sudo realm join -U Administrator erdogan.local
-sudo realm join -v -U Administrator erdogan.local
+sudo realm join -U yr503373 yargitay.gov.tr
+sudo realm join -v -U yr503373 yargitay.gov.tr
 ```
 
 ------------------------------------------------------------------------
@@ -126,7 +126,26 @@ use_fully_qualified_names = False
 fallback_homedir = /home/%u
 access_provider = ad
 ```
+```
+[sssd]
+domains = yargitay.gov.tr
+config_file_version = 2
+services = nss, pam
 
+[domain/yargitay.gov.tr]
+ad_domain = yargitay.gov.tr
+krb5_realm = YARGITAY.GOV.TR
+realmd_tags = manages-system joined-with-adcli
+cache_credentials = True
+id_provider = ad
+krb5_store_password_if_offline = True
+default_shell = /bin/bash
+ldap_id_mapping = True
+use_fully_qualified_names = False
+fallback_homedir = /home/%u
+access_provider = simple
+simple_allow_groups = gg_web_server, sudo, gg_server
+```
 Servis restart:
 
 ``` bash
@@ -147,8 +166,8 @@ sudo pam-auth-update --enable mkhomedir
 
 ``` bash
 sudo realm deny --all
-sudo realm permit -g sistem
-sudo realm permit -g web
+sudo realm permit -g gg_server
+sudo realm permit -g gg_web_server
 ```
 
 ------------------------------------------------------------------------
@@ -164,7 +183,7 @@ sudo nano /etc/sudoers.d/domain_admins
 ```
 
 ``` bash
-%web ALL=(ALL) /usr/bin/systemctl restart nginx, /usr/bin/systemctl reload nginx, /usr/bin/systemctl status nginx, /usr/bin/systemctl start nginx, /usr/bin/systemctl stop nginx, /usr/bin/systemctl restart nginx.service, /usr/bin/systemctl reload nginx.service, /usr/bin/systemctl status nginx.service, /usr/bin/systemctl start nginx.service, /usr/bin/systemctl stop nginx.service
+%gg_web_server ALL=(ALL) /usr/bin/systemctl restart nginx, /usr/bin/systemctl reload nginx, /usr/bin/systemctl status nginx, /usr/bin/systemctl start nginx, /usr/bin/systemctl stop nginx, /usr/bin/systemctl restart nginx.service, /usr/bin/systemctl reload nginx.service, /usr/bin/systemctl status nginx.service, /usr/bin/systemctl start nginx.service, /usr/bin/systemctl stop nginx.service
 ```
 
 ------------------------------------------------------------------------
@@ -194,8 +213,8 @@ sudo setfacl -R -d -m g:www-data:rwx /var/www/html/intranet
 sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 775 /var/www/html
 sudo chmod g+s /var/www/html
-sudo setfacl -R -m g:web:rwx /var/www/html
-sudo setfacl -R -d -m g:web:rwx /var/www/html
+sudo setfacl -R -m g:gg_web_server:rwx /var/www/html
+sudo setfacl -R -d -m g:gg_web_server:rwx /var/www/html
 sudo setfacl -R -d -m g:www-data:rwx /var/www/html
 sudo setfacl -R -m u:yrg_sistem:rwx /var/www/html
 sudo setfacl -R -d -m u:yrg_sistem:rwx /var/www/html
@@ -221,13 +240,13 @@ getent group web
 ## Domain Kontrolleri
 
 ``` bash
-ping -c 3 erdogan.local
+ping -c 3 yargitay.gov.tr
 timedatectl
 sudo realm list
 id guler
-getent passwd erdogan
-su - guler
-sudo -l -U guler
+getent passwd srv3373
+su - srv3373
+sudo -l -U srv3373
 getfacl /var/www/html/intranet
 sudo tail -f /var/log/auth.log
 sudo systemctl status sssd
