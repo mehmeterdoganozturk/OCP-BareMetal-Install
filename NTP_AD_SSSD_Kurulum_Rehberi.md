@@ -302,14 +302,14 @@ account required pam_access.so
 
 # ✅ Senaryo Testleri
 
-  Senaryo   Kullanıcı   Sunucu      Komut                          Beklenen Sonuç
-  --------- ----------- ----------- ------------------------------ ----------------
-  SSH       Guler       Server01    ssh guler@server01             ✅
-  SSH       Guler       Server02    ssh guler@server02             ❌
-  Root      Guler       Server01    sudo su                        ❌
-  Servis    Guler       Server01    sudo systemctl restart nginx   ✅
-  Dosya     Guler       Server01    /var/www/html/intranet         ✅
-  Admin     Erdogan     Her İkisi   sudo -i                        ✅
+| Senaryo           | Kullanıcı | Sunucu    | Komut                          | Beklenen Sonuç        |
+|-------------------|------------|-----------|----------------------------------|------------------------|
+| SSH Erişimi       | Guler      | Server01  | `ssh guler@server01`            | ✅ Başarılı            |
+| SSH Erişimi       | Guler      | Server02  | `ssh guler@server02`            | ❌ Erişim Reddedildi   |
+| Root Olma         | Guler      | Server01  | `sudo su`                       | ❌ Yetkisiz            |
+| Servis Yönetimi   | Guler      | Server01  | `sudo systemctl restart nginx`  | ✅ Başarılı            |
+| Dosya Yazma       | Guler      | Server01  | `/var/www/html/intranet`        | ✅ Yazabilir (Grup: www-data) |
+| Tam Yetki (Admin) | Erdogan    | Her İkisi | `sudo -i`                       | ✅ Root Olur           |
 
 ------------------------------------------------------------------------
 
