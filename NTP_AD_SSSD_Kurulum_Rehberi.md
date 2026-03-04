@@ -187,37 +187,132 @@ sudo nano /etc/sudoers.d/domain_admins
 ```
 
 ------------------------------------------------------------------------
+# 📁 /var/www/html ACL & Yetkilendirme Yapılandırması
 
-# 7️⃣ ACL & SGID Yapılandırması
+Bu yapılandırmada:
 
-## Intranet Dizini
+-   **Grup:** gg_server\
+-   **Grup:** gg_web_server\
+-   **Kullanıcı:** yrg_sistem\
+-   **Sahip:** www-data\
+-   SGID aktif (yeni dosyalar otomatik doğru grupla gelir)\
+-   Mevcut ve gelecekteki dosyalar için ACL tanımlıdır
 
-``` bash
-sudo mkdir -p /var/www/html/intranet
-sudo chown -R www-data:www-data /var/www/html/intranet
-sudo chmod -R 775 /var/www/html/intranet
-sudo chmod g+s /var/www/html/intranet
-```
+------------------------------------------------------------------------
 
-### ACL
-
-``` bash
-sudo setfacl -R -m g:web:rwx /var/www/html/intranet
-sudo setfacl -R -d -m g:web:rwx /var/www/html/intranet
-sudo setfacl -R -d -m g:www-data:rwx /var/www/html/intranet
-```
-
-## Ana Dizin
+## 1️⃣ Sahiplik ve Temel Linux İzinleri
 
 ``` bash
 sudo chown -R www-data:www-data /var/www/html
 sudo chmod -R 775 /var/www/html
+```
+
+------------------------------------------------------------------------
+
+## 2️⃣ SGID Biti (Yeni Dosyalar İçin)
+
+Yeni oluşturulan dosya ve klasörlerin grubu otomatik `www-data` olur:
+
+``` bash
 sudo chmod g+s /var/www/html
+```
+
+Kontrol:
+
+``` bash
+ls -ld /var/www/html
+```
+
+Çıktıda şu format görülmelidir:
+
+    drwxrwsr-x
+
+------------------------------------------------------------------------
+
+## 3️⃣ ACL -- Mevcut Dosyalar İçin Yetkiler
+
+### Gruplar
+
+``` bash
+sudo setfacl -R -m g:gg_server:rwx /var/www/html
 sudo setfacl -R -m g:gg_web_server:rwx /var/www/html
-sudo setfacl -R -d -m g:gg_web_server:rwx /var/www/html
-sudo setfacl -R -d -m g:www-data:rwx /var/www/html
+```
+
+### Kullanıcı
+
+``` bash
 sudo setfacl -R -m u:yrg_sistem:rwx /var/www/html
+```
+
+------------------------------------------------------------------------
+
+## 4️⃣ Default ACL -- Gelecekte Oluşacak Dosyalar İçin
+
+### Gruplar
+
+``` bash
+sudo setfacl -R -d -m g:gg_server:rwx /var/www/html
+sudo setfacl -R -d -m g:gg_web_server:rwx /var/www/html
+```
+
+### Kullanıcı
+
+``` bash
 sudo setfacl -R -d -m u:yrg_sistem:rwx /var/www/html
+```
+
+### Sistem Stabilitesi İçin www-data Default ACL
+
+``` bash
+sudo setfacl -R -d -m g:www-data:rwx /var/www/html
+```
+
+------------------------------------------------------------------------
+
+# 🔎 Yapılandırma Kontrolü
+
+``` bash
+getfacl /var/www/html
+```
+
+Beklenen ACL girdileri:
+
+    group:gg_server:rwx
+    group:gg_web_server:rwx
+    user:yrg_sistem:rwx
+    default:group:gg_server:rwx
+    default:group:gg_web_server:rwx
+    default:user:yrg_sistem:rwx
+
+------------------------------------------------------------------------
+
+# 🎯 Yetki Matrisi
+
+  Yetkili         Tür           Yetki
+  --------------- ------------- -------
+  www-data        Owner         rwx
+  gg_server       Group (ACL)   rwx
+  gg_web_server   Group (ACL)   rwx
+  yrg_sistem      User (ACL)    rwx
+
+------------------------------------------------------------------------
+
+# ⚠️ AD Kullanıcı/Grup Kontrolü
+
+``` bash
+getent group gg_web_server
+getent group gg_server
+id yrg_sistem
+```
+
+Görünmüyorsa:
+
+``` bash
+sudo sss_cache -E
+sudo systemctl restart sssd
+```
+
+
 ```
 
 ------------------------------------------------------------------------
