@@ -126,7 +126,7 @@ use_fully_qualified_names = False
 fallback_homedir = /home/%u
 access_provider = ad
 ```
-```
+``` ini
 [sssd]
 domains = yargitay.gov.tr
 config_file_version = 2
