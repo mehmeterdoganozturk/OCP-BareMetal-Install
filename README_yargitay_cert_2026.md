@@ -46,6 +46,11 @@ openssl req -new -newkey rsa:2048 -nodes \
   -keyout yargitay2048.key \
   -out yargitay2048.csr \
   -addext "subjectAltName=DNS:*.yargitay.gov.tr,DNS:*.yargitaycb.gov.tr,DNS:www.gpo.gov.tr"
+
+openssl req -new -newkey rsa:2048 -nodes \
+  -keyout yargitay2048.key \
+  -out yargitay2048.csr \
+  -addext "subjectAltName=DNS:yargitay.gov.tr,DNS:*.yargitay.gov.tr,DNS:www.yargitay.gov.tr,DNS:*.yargitaycb.gov.tr,DNS:www.gpo.gov.tr"
 ```
 
 Komut açıklaması:
